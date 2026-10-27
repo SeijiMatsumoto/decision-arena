@@ -8,6 +8,7 @@ from decision_arena.metrics import auc, best_threshold, macro_f1, ndcg
 from decision_arena.providers import ModelSpec, normalize_decision
 from decision_arena.recommend import mcnemar_p, recommend
 from decision_arena.runner import run_eval
+from decision_arena.snapshot import END, START, render, write_readme
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -86,3 +87,18 @@ def test_recommend_is_deterministic_and_flags_weak_models(tmp_path):
     assert overall["picks"][0]["model"] == "perfect"  # tied with pricey, but cheaper
     assert "weak" in {a["model"] for a in overall["avoid"]}
     assert any("decision model" in n for n in overall["notes"])
+
+
+def test_snapshot_renders_and_replaces_block(tmp_path):
+    datasets = load_datasets(ROOT / "datasets")
+    models = [ModelSpec(name="perfect", provider="mock", model="mock", accuracy=1.0)]
+    report = asyncio.run(run_eval(datasets, models, tmp_path / "cache"))
+    section = render(report)
+    assert section.startswith("## Results snapshot (")
+    readme = tmp_path / "README.md"
+    readme.write_text("# X\n\n## Datasets\n")
+    write_readme(readme, section)
+    write_readme(readme, section)  # second write replaces, never duplicates
+    text = readme.read_text()
+    assert text.count(START) == 1 and text.count(END) == 1
+    assert text.index(START) < text.index("## Datasets")

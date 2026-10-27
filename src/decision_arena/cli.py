@@ -18,6 +18,7 @@ from .html_report import write_html
 from .providers import load_models
 from .recommend import recommend
 from .runner import run_eval, save_report
+from .snapshot import render, write_readme
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 console = Console()
@@ -194,6 +195,18 @@ def cmd_show(args: argparse.Namespace) -> None:
     print_report(json.loads(Path(path).read_text()), args.misses)
 
 
+def cmd_snapshot(args: argparse.Namespace) -> None:
+    path = args.report or max((PROJECT_ROOT / "reports").glob("run-*.json"), default=None)
+    if path is None:
+        raise SystemExit("No reports yet. Run `arena run` first.")
+    section = render(json.loads(Path(path).read_text()))
+    if args.write:
+        write_readme(PROJECT_ROOT / "README.md", section)
+        console.print(f"Updated README.md from {Path(path).name}")
+    else:
+        print(section)
+
+
 def cmd_serve(args: argparse.Namespace) -> None:
     import uvicorn
 
@@ -222,6 +235,11 @@ def main() -> None:
     show.add_argument("report", nargs="?", type=Path)
     show.add_argument("--misses", action="store_true")
     show.set_defaults(func=cmd_show)
+
+    snap = sub.add_parser("snapshot", help="Render a report as a dated Markdown results section")
+    snap.add_argument("report", nargs="?", type=Path, help="Report JSON (latest by default)")
+    snap.add_argument("--write", action="store_true", help="Replace the snapshot block in README.md")
+    snap.set_defaults(func=cmd_snapshot)
 
     serve = sub.add_parser("serve", help="Start the API (and built web UI) on localhost")
     serve.add_argument("--port", type=int, default=8000)
