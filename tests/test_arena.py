@@ -8,7 +8,7 @@ from decision_arena.metrics import auc, best_threshold, macro_f1, ndcg
 from decision_arena.providers import ModelSpec, normalize_decision
 from decision_arena.recommend import mcnemar_p, recommend
 from decision_arena.runner import run_eval
-from decision_arena.snapshot import END, START, render, write_readme
+from decision_arena.snapshot import END, START, save_snapshot, write_index, write_readme_pointer
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -89,16 +89,21 @@ def test_recommend_is_deterministic_and_flags_weak_models(tmp_path):
     assert any("decision model" in n for n in overall["notes"])
 
 
-def test_snapshot_renders_and_replaces_block(tmp_path):
+def test_snapshot_folder_index_and_readme_pointer(tmp_path):
     datasets = load_datasets(ROOT / "datasets")
     models = [ModelSpec(name="perfect", provider="mock", model="mock", accuracy=1.0)]
     report = asyncio.run(run_eval(datasets, models, tmp_path / "cache"))
-    section = render(report)
-    assert section.startswith("## Results snapshot (")
+    snapshots = tmp_path / "snapshots"
+    folder = save_snapshot(report, snapshots)
+    assert (folder / "report.json").exists()
+    assert (folder / "README.md").read_text().startswith("# Results snapshot: ")
+    write_index(snapshots)
+    assert folder.name in (snapshots / "README.md").read_text()
     readme = tmp_path / "README.md"
     readme.write_text("# X\n\n## Datasets\n")
-    write_readme(readme, section)
-    write_readme(readme, section)  # second write replaces, never duplicates
+    write_readme_pointer(readme, snapshots)
+    write_readme_pointer(readme, snapshots)  # second write replaces, never duplicates
     text = readme.read_text()
     assert text.count(START) == 1 and text.count(END) == 1
+    assert f"snapshots/{folder.name}/" in text
     assert text.index(START) < text.index("## Datasets")

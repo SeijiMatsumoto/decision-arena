@@ -22,6 +22,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATASETS_DIR = PROJECT_ROOT / "datasets"
 MODELS_FILE = PROJECT_ROOT / "models.yaml"
 REPORTS_DIR = PROJECT_ROOT / "reports"
+SNAPSHOTS_DIR = PROJECT_ROOT / "snapshots"
 CACHE_DIR = PROJECT_ROOT / ".cache"
 WEB_DIST = PROJECT_ROOT / "web" / "dist"
 
@@ -55,26 +56,34 @@ def get_datasets() -> list[dict[str, Any]]:
     return [d.model_dump() for d in load_datasets(DATASETS_DIR)]
 
 
+def report_paths() -> dict[str, Path]:
+    """Local runs (git-ignored) plus committed snapshots, so a fresh clone has results to browse."""
+    paths = {p.stem: p for p in REPORTS_DIR.glob("run-*.json")}
+    paths.update({f"snapshot-{p.parent.name}": p for p in SNAPSHOTS_DIR.glob("*/report.json")})
+    return paths
+
+
 @app.get("/api/reports")
 def list_reports() -> list[dict[str, Any]]:
     out = []
-    for path in sorted(REPORTS_DIR.glob("run-*.json"), reverse=True):
+    for report_id, path in report_paths().items():
         report = json.loads(path.read_text())
         out.append(
             {
-                "id": path.stem,
+                "id": report_id,
                 "created_at": report["created_at"],
                 "models": [m["name"] for m in report["models"]],
                 "datasets": list(report["datasets"]),
+                "snapshot": report_id.startswith("snapshot-"),
             }
         )
-    return out
+    return sorted(out, key=lambda r: (r["created_at"], r["snapshot"]), reverse=True)
 
 
 @app.get("/api/reports/{report_id}")
 def get_report(report_id: str) -> dict[str, Any]:
-    path = REPORTS_DIR / f"{report_id}.json"
-    if not report_id.startswith("run-") or not path.is_file():
+    path = report_paths().get(report_id)
+    if path is None:
         raise HTTPException(404, "report not found")
     report = json.loads(path.read_text())
     return {"id": report_id, **report, "takeaways": recommend(report)}

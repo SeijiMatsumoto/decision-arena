@@ -18,7 +18,7 @@ from .html_report import write_html
 from .providers import load_models
 from .recommend import recommend
 from .runner import run_eval, save_report
-from .snapshot import render, write_readme
+from .snapshot import render, save_snapshot, write_index, write_readme_pointer
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 console = Console()
@@ -199,12 +199,15 @@ def cmd_snapshot(args: argparse.Namespace) -> None:
     path = args.report or max((PROJECT_ROOT / "reports").glob("run-*.json"), default=None)
     if path is None:
         raise SystemExit("No reports yet. Run `arena run` first.")
-    section = render(json.loads(Path(path).read_text()))
-    if args.write:
-        write_readme(PROJECT_ROOT / "README.md", section)
-        console.print(f"Updated README.md from {Path(path).name}")
-    else:
-        print(section)
+    report = json.loads(Path(path).read_text())
+    if args.print:
+        print(render(report))
+        return
+    snapshots = PROJECT_ROOT / "snapshots"
+    folder = save_snapshot(report, snapshots)
+    write_index(snapshots)
+    write_readme_pointer(PROJECT_ROOT / "README.md", snapshots)
+    console.print(f"Saved {folder.relative_to(PROJECT_ROOT)}/ and pointed README.md at the latest snapshot")
 
 
 def cmd_serve(args: argparse.Namespace) -> None:
@@ -236,9 +239,9 @@ def main() -> None:
     show.add_argument("--misses", action="store_true")
     show.set_defaults(func=cmd_show)
 
-    snap = sub.add_parser("snapshot", help="Render a report as a dated Markdown results section")
+    snap = sub.add_parser("snapshot", help="Save a report as a dated snapshot under snapshots/")
     snap.add_argument("report", nargs="?", type=Path, help="Report JSON (latest by default)")
-    snap.add_argument("--write", action="store_true", help="Replace the snapshot block in README.md")
+    snap.add_argument("--print", action="store_true", help="Print the Markdown instead of saving")
     snap.set_defaults(func=cmd_snapshot)
 
     serve = sub.add_parser("serve", help="Start the API (and built web UI) on localhost")

@@ -60,7 +60,7 @@ export function Results({ reportId, dataset }: { reportId?: string; dataset?: st
         >
           {reports?.map((r) => (
             <option key={r.id} value={r.id}>
-              {new Date(r.created_at).toLocaleString()} · {r.models.length} models
+              {new Date(r.created_at).toLocaleString()} · {r.models.length} models{r.snapshot ? " · snapshot" : ""}
             </option>
           ))}
         </select>

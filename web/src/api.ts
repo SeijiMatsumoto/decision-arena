@@ -100,6 +100,7 @@ export interface ReportSummary {
   created_at: string;
   models: string[];
   datasets: string[];
+  snapshot: boolean;
 }
 
 export interface RunStatus {
