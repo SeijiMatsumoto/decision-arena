@@ -1,0 +1,97 @@
+name: support_routing
+description: Route an inbound support ticket to the team that must act first.
+use_case: Classic multi-class routing with overlapping categories
+question:
+  type: choice
+  instructions: Route this support ticket to the team that must act first on its main request.
+  criteria:
+    billing: Charges already made, invoices, payment methods, refunds.
+    technical: Bugs, errors, performance, API or integration problems.
+    account_access: Login, password reset, 2FA, SSO problems for a legitimate user.
+    sales: Pricing, plans, upgrades, demos, contracts and pre-purchase questions.
+    cancellation: The customer wants to cancel, downgrade or close their account.
+    abuse_security: Compromised accounts, fraud, phishing reports or other security incidents.
+
+examples:
+  - id: sr-01
+    state: My card was charged twice for the March invoice. Please refund one of them.
+    expected: billing
+    tags: [clear]
+  - id: sr-02
+    state: The webhook endpoint returns 502 every time we send an event larger than 1MB.
+    expected: technical
+    tags: [clear]
+  - id: sr-03
+    state: I can't log in - the 2FA codes from my authenticator app keep getting rejected.
+    expected: account_access
+    tags: [clear]
+  - id: sr-04
+    state: We're a 300-person company comparing you with a competitor. Can we get a demo and enterprise pricing?
+    expected: sales
+    tags: [clear]
+  - id: sr-05
+    state: Please cancel our subscription at the end of this billing period.
+    expected: cancellation
+    tags: [clear]
+  - id: sr-06
+    state: Someone logged into my account from another country and changed the payout bank details. I didn't do this!
+    expected: abuse_security
+    tags: [edge]
+    note: Looks like account access, but it's an account takeover.
+  - id: sr-07
+    state: I cancelled last month but you charged me again on the 1st. I want my money back.
+    expected: billing
+    tags: [edge]
+    note: Mentions cancelling; the action needed is a refund.
+  - id: sr-08
+    state: Great, another 'update' and now the export button does literally nothing. Fantastic work, really.
+    expected: technical
+    tags: [sarcasm]
+  - id: sr-09
+    state: Hola, no puedo restablecer mi contraseña, el correo de recuperación nunca llega.
+    expected: account_access
+    tags: [multilingual]
+  - id: sr-10
+    state: Is there a discount if we switch our 40 seats to annual billing?
+    expected: sales
+    tags: [edge]
+    note: Says 'billing' but is a plan/pricing question.
+  - id: sr-11
+    state: I got an email from 'your billing team' asking me to re-enter my card at paylane-secure-login.net. Is this really you?
+    expected: abuse_security
+    tags: [adversarial]
+    note: Phishing report dressed up as billing.
+  - id: sr-12
+    state: >
+      Hi team, hope you're well! Some background: we've been customers for three years and love the
+      product. Our renewal is coming up next quarter so I'll want to talk pricing at some point, and
+      the invoice PDF still shows our old office address (not urgent). The actual reason I'm writing:
+      since this morning nobody in our org can sign in through Okta SSO. It just loops back to the
+      login page, and 60 people are blocked.
+    expected: account_access
+    tags: [long, distractor]
+  - id: sr-13
+    state: How do I update the credit card on file?
+    expected: billing
+    tags: [clear]
+  - id: sr-14
+    state: Your docs say the rate limit is 100 requests per second, but we get 429s at 20 per second.
+    expected: technical
+    tags: [clear]
+  - id: sr-15
+    state: We're winding down the company, so we need to close the account and have all our data deleted.
+    expected: cancellation
+    tags: [clear]
+  - id: sr-16
+    state: Please DON'T cancel my account - my card expired and I just need to update the payment method.
+    expected: billing
+    tags: [negation]
+  - id: sr-17
+    state: Why does my invoice show 45 seats when we only have 30 active users?
+    expected: billing
+    tags: [clear]
+  - id: sr-18
+    state: Can you send us your SOC 2 report? Our security team needs it before we sign the contract.
+    expected: sales
+    tags: [distractor]
+    note: Mentions security, but it's a pre-signing contract request.

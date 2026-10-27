@@ -1,0 +1,83 @@
+name: reply_intent
+description: Classify a reply to a cold outreach email.
+use_case: Outbound sales tooling - triage replies after a people-finder campaign
+question:
+  type: choice
+  instructions: Classify the intent of this reply to a sales outreach email.
+  criteria:
+    interested: Positive intent; wants a call, a demo, materials or a trial (even if they also ask questions).
+    not_now: Open to it, but explicitly defers to a later time.
+    not_interested: Declines without asking to stop all contact.
+    wrong_person: Says they are not the right contact, redirects to someone else, or has left the company.
+    unsubscribe: Explicitly asks to stop receiving emails.
+    out_of_office: Automated absence reply from someone who will return.
+    question: Neutral; asks for information before showing any interest or disinterest.
+
+examples:
+  - id: ri-01
+    state: Sounds interesting - can you send over some times for a call next week?
+    expected: interested
+    tags: [clear]
+  - id: ri-02
+    state: Not a priority this quarter. Circle back in January?
+    expected: not_now
+    tags: [clear]
+  - id: ri-03
+    state: We already use a competitor and we're happy with it. No thanks.
+    expected: not_interested
+    tags: [clear]
+  - id: ri-04
+    state: I'm not the right person for this - you'll want Dana Whitfield, who runs procurement.
+    expected: wrong_person
+    tags: [clear]
+  - id: ri-05
+    state: Remove me from your list.
+    expected: unsubscribe
+    tags: [clear]
+  - id: ri-06
+    state: I'm out of the office until Nov 4 with limited access to email. For urgent matters, contact ops@kontora.de.
+    expected: out_of_office
+    tags: [clear]
+  - id: ri-07
+    state: How does this integrate with Salesforce? And is pricing per seat?
+    expected: question
+    tags: [clear]
+  - id: ri-08
+    state: Stop emailing me. This is the fourth message this month.
+    expected: unsubscribe
+    tags: [edge]
+  - id: ri-09
+    state: Thanks! I'm on parental leave until March but would love to chat when I'm back.
+    expected: not_now
+    tags: [edge]
+    note: Human reply, not an auto-responder; positive but deferred.
+  - id: ri-10
+    state: Not something I'd buy, but Marco on our data team has been looking for exactly this - cc'ing him.
+    expected: wrong_person
+    tags: [edge]
+  - id: ri-11
+    state: "Automatic reply: Thank you for your message. I have left Northwind Logistics. Please contact Sam Lee at sam.lee@northwind.example."
+    expected: wrong_person
+    tags: [adversarial]
+    note: Auto-reply, but they're not coming back.
+  - id: ri-12
+    state: Sure, why not. Send me the deck.
+    expected: interested
+    tags: [clear]
+  - id: ri-13
+    state: Merci pour votre message, mais ce n'est pas pertinent pour nous.
+    expected: not_interested
+    tags: [multilingual]
+  - id: ri-14
+    state: lol no
+    expected: not_interested
+    tags: [edge]
+  - id: ri-15
+    state: Could be relevant. What's the minimum contract length before I loop in my team?
+    expected: question
+    tags: [edge]
+  - id: ri-16
+    state: Yes! We've been looking for something like this. Is there a free trial?
+    expected: interested
+    tags: [distractor]
+    note: Asks a question, but intent is clearly positive.

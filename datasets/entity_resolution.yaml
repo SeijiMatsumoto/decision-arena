@@ -1,0 +1,89 @@
+name: entity_resolution
+description: Do two records refer to the same real-world person or organization?
+use_case: Dedup / merge records across sources in a people or company finder
+question:
+  type: noul
+  instructions: >
+    Decide whether `record_a` and `record_b` describe the same real-world entity. A parent company
+    and its subsidiary are different entities. A renamed company is the same entity.
+  criteria:
+    "true": Both records describe the same person or the same organization.
+    "false": The records describe different people or different organizations.
+
+examples:
+  - id: er-01
+    state:
+      record_a: Acme Robotics Inc., 500 Market St, San Francisco, CA
+      record_b: ACME Robotics - San Francisco, CA - acmerobotics.com
+    expected: true
+    tags: [clear]
+  - id: er-02
+    state:
+      record_a: Jonathan Smith, CFO, Northwind Logistics
+      record_b: Jon Smith, Chief Financial Officer at Northwind Logistics LLC
+    expected: true
+    tags: [clear]
+  - id: er-03
+    state:
+      record_a: John Smith, CFO, Northwind Logistics
+      record_b: John Smith, Warehouse Associate, Northwind Logistics
+    expected: false
+    tags: [distractor]
+    note: Same name and employer, different person.
+  - id: er-04
+    state:
+      record_a: Delta Analytics - data consulting firm, Boston, MA, delta-analytics.io
+      record_b: Delta Analytics Ltd - credit-risk software, London, UK, deltaanalytics.co.uk
+    expected: false
+    tags: [distractor]
+  - id: er-05
+    state:
+      record_a: Kontora GmbH, Berlin
+      record_b: Kontora (SME banking app), Berlin, kontora.de
+    expected: true
+    tags: [clear]
+  - id: er-06
+    state:
+      record_a: Hexa Labs Inc. (formerly Brightpath Software), Seattle, WA
+      record_b: Brightpath Software, Seattle, WA, founded 2014
+    expected: true
+    tags: [edge]
+    note: Rename.
+  - id: er-07
+    state:
+      record_a: Dra. María García López, cardióloga, Hospital Clínico Universitario de Valencia
+      record_b: Maria Garcia, MD - Cardiology, Hospital Clinico Valencia
+    expected: true
+    tags: [multilingual]
+  - id: er-08
+    state:
+      record_a: Maria Garcia, Software Engineer, Austin, TX
+      record_b: Maria Garcia, Pastry Chef, Austin, TX
+    expected: false
+    tags: [clear]
+  - id: er-09
+    state:
+      record_a: Paylane - payments infrastructure, Berlin
+      record_b: Paylane Foundation - non-profit financial literacy charity, Dublin
+    expected: false
+    tags: [distractor]
+  - id: er-10
+    state:
+      record_a: Tessellate Inc. - parent company, San Francisco
+      record_b: Tessellate Japan K.K. - wholly-owned subsidiary, Tokyo
+    expected: false
+    tags: [edge]
+    note: Parent vs. subsidiary, per the instructions.
+  - id: er-11
+    state:
+      record_a: Ken Ito, Staff ML Engineer, Tessellate (2024-present), linkedin.com/in/kenito
+      record_b: Kenji Ito, Machine Learning Engineer, Tessellate (2021-2024), linkedin.com/in/kenito
+    expected: true
+    tags: [edge]
+    note: Promotion plus nickname; same profile URL.
+  - id: er-12
+    state:
+      record_a: Orion Health Partners, Denver, CO (physician practice group)
+      record_b: Orion Health Partners - physician group - Denver, Colorado - orionhp.com - (303) 555-0142
+    expected: true
+    tags: [clear]

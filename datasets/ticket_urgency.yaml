@@ -1,0 +1,63 @@
+name: ticket_urgency
+description: Score the true urgency of a ticket from its impact, not its tone.
+use_case: Ordinal scoring - prioritization queues and SLA assignment
+question:
+  type: score
+  instructions: Rate how urgent this ticket is, judging by real impact rather than the writer's tone.
+  criteria:
+    - "Low: no impact on work; feedback, cosmetic issue or nice-to-have."
+    - "Normal: minor issue with an easy workaround."
+    - "High: an important feature is broken for a user or team, with no good workaround."
+    - "Critical: outage, data loss, security incident, or many users blocked."
+
+examples:
+  - id: tu-01
+    state: Feature request - a dark mode for the dashboard would be nice.
+    expected: 0
+    tags: [clear]
+  - id: tu-02
+    state: The CSV export uses US date format. I just reformat the column in Excel.
+    expected: 1
+    tags: [clear]
+  - id: tu-03
+    state: The report builder crashes whenever I add a filter, so I can't build the monthly report that's due Friday.
+    expected: 2
+    tags: [clear]
+  - id: tu-04
+    state: The entire production API is returning 500s. All of our customers are down.
+    expected: 3
+    tags: [clear]
+  - id: tu-05
+    state: URGENT!!!! The logo on the login page looks slightly blurry on my 4K monitor!!! FIX ASAP!!!
+    expected: 0
+    tags: [adversarial]
+    note: Loud tone, cosmetic issue.
+  - id: tu-06
+    state: hey, small thing - i think someone got into our admin account, there are a few users we didn't create. no rush.
+    expected: 3
+    tags: [adversarial]
+    note: Calm tone, security incident.
+  - id: tu-07
+    state: Typo on the pricing page - 'recieve'.
+    expected: 0
+    tags: [clear]
+  - id: tu-08
+    state: Google Calendar sync runs about 10 minutes behind; events do show up eventually.
+    expected: 1
+    tags: [edge]
+  - id: tu-09
+    state: After last night's migration, about half of our customer records are missing from the database.
+    expected: 3
+    tags: [clear]
+  - id: tu-10
+    state: Our team of 12 can't upload any files - the upload button errors out. The rest of the app works.
+    expected: 2
+    tags: [edge]
+  - id: tu-11
+    state: Search takes 2-3 seconds on large workspaces. It's a bit slow but works.
+    expected: 1
+    tags: [edge]
+  - id: tu-12
+    state: Would love an API endpoint for bulk-deleting tags someday.
+    expected: 0
+    tags: [clear]

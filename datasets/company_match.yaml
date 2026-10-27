@@ -1,0 +1,110 @@
+name: company_match
+description: Does a company match a firmographic search? Every constraint must hold today.
+use_case: Company finder - qualify accounts from a scraped list
+question:
+  type: noul
+  instructions: >
+    Decide whether the company in `company` matches the `search`. Every constraint must hold today,
+    and the company must currently operate independently (not acquired and absorbed).
+  criteria:
+    "true": The company currently satisfies every constraint in the search.
+    "false": At least one constraint fails, or the company no longer operates independently.
+
+examples:
+  - id: cm-x1
+    group: restaurant-saas
+    state:
+      search: US-based B2B SaaS companies selling to restaurants, 50-500 employees
+      company: Tablestack - Restaurant POS and back-office SaaS. HQ Austin, TX. About 220 employees.
+    expected: true
+    tags: [clear]
+  - id: cm-x2
+    group: restaurant-saas
+    state:
+      search: US-based B2B SaaS companies selling to restaurants, 50-500 employees
+      company: Dinely - Consumer app that helps diners discover restaurants and earn rewards; revenue from consumer subscriptions. New York, 300 employees.
+    expected: false
+    tags: [distractor]
+    note: Restaurant-adjacent but sells to consumers.
+  - id: cm-x3
+    group: restaurant-saas
+    state:
+      search: US-based B2B SaaS companies selling to restaurants, 50-500 employees
+      company: ShiftPilot - Workforce scheduling software for hospitality and restaurant groups. Denver, CO. 85 employees.
+    expected: true
+    tags: [edge]
+  - id: cm-x4
+    group: restaurant-saas
+    state:
+      search: US-based B2B SaaS companies selling to restaurants, 50-500 employees
+      company: Brigade Labs - Kitchen inventory SaaS for restaurants. Founded 2024, 12 employees, Portland, OR.
+    expected: false
+    tags: [edge]
+    note: Too small.
+  - id: cm-x5
+    group: restaurant-saas
+    state:
+      search: US-based B2B SaaS companies selling to restaurants, 50-500 employees
+      company: Saucier GmbH - Restaurant reservation software. Munich, Germany. 140 employees.
+    expected: false
+    tags: [distractor]
+  - id: cm-x6
+    group: restaurant-saas
+    state:
+      search: US-based B2B SaaS companies selling to restaurants, 50-500 employees
+      company: Platewise - Restaurant analytics SaaS, Chicago, 180 employees. Acquired by Tablestack in March 2026; the product is now part of the Tablestack suite.
+    expected: false
+    tags: [stale-data]
+  - id: cm-x7
+    group: restaurant-saas
+    state:
+      search: US-based B2B SaaS companies selling to restaurants, 50-500 employees
+      company: FreshCrate - Wholesale distributor delivering produce to restaurants. Chicago, 450 employees.
+    expected: false
+    tags: [distractor]
+    note: Sells to restaurants but is not software.
+
+  - id: cm-y1
+    group: carbon-removal
+    state:
+      search: Climate tech startups doing carbon removal that have raised a Series A or later
+      company: Basalt Loop - Enhanced rock weathering for durable CO2 removal. Raised a $48M Series B in 2025.
+    expected: true
+    tags: [clear]
+  - id: cm-y2
+    group: carbon-removal
+    state:
+      search: Climate tech startups doing carbon removal that have raised a Series A or later
+      company: Greenledger - Carbon accounting software that helps companies measure their emissions. Series C.
+    expected: false
+    tags: [distractor]
+  - id: cm-y3
+    group: carbon-removal
+    state:
+      search: Climate tech startups doing carbon removal that have raised a Series A or later
+      company: Deepsink - Direct air capture startup. Pre-seed; building its first pilot unit.
+    expected: false
+    tags: [edge]
+  - id: cm-y4
+    group: carbon-removal
+    state:
+      search: Climate tech startups doing carbon removal that have raised a Series A or later
+      company: Kelpwork - Ocean-based carbon removal through kelp cultivation and deep-sea sinking. $22M Series A.
+    expected: true
+    tags: [clear]
+  - id: cm-y5
+    group: carbon-removal
+    state:
+      search: Climate tech startups doing carbon removal that have raised a Series A or later
+      company: Offsetly - Marketplace for avoided-deforestation carbon credits. Series A.
+    expected: false
+    tags: [edge]
+    note: Avoidance credits, not removal.
+  - id: cm-y6
+    group: carbon-removal
+    state:
+      search: Climate tech startups doing carbon removal that have raised a Series A or later
+      company: Char Systems - Turns farm waste into biochar that locks carbon into soil for centuries. Closed a $30M Series A.
+    expected: true
+    tags: [edge]
+    note: Removal is implied, not named.

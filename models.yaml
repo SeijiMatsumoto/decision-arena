@@ -1,0 +1,157 @@
+# Contenders. `arena run` uses every entry with enabled: true unless --models is given.
+#
+# provider: decisions -> OpenRouter Decisions API (POST /api/alpha/decisions). One request
+#                        shape for every decision model, so adding one is just a new model ID.
+# provider: llm       -> OpenRouter chat completions with a JSON schema. A generative baseline,
+#                        so you can see what a decision model buys you over a cheap LLM.
+# provider: mock      -> Offline noisy oracle for testing the pipeline without an API key.
+#
+# Decision model IDs come from https://openrouter.ai/docs/guides/community/jev (Oct 2026).
+
+models:
+  - name: jev-1.14
+    provider: decisions
+    model: typesafe/jev-1.14
+
+  - name: jev-1.13
+    provider: decisions
+    model: typesafe/jev-1.13
+    enabled: false
+
+  - name: luna-decisions
+    provider: decisions
+    model: openai/gpt-6-luna-decisions
+
+  - name: ms-decision-1
+    provider: decisions
+    model: microsoft/microsoft-decision-1
+
+  - name: liquid-d1
+    provider: decisions
+    model: liquid/d1
+
+  - name: clef-flash
+    provider: decisions
+    model: cloudflare/clef-flash
+
+  - name: pplx-decider-flash
+    provider: decisions
+    model: perplexity/pplx-decider-flash-v1.2
+    enabled: false
+
+  - name: mercury-decide
+    provider: decisions
+    model: inception/mercury-decide
+    enabled: false
+
+  - name: solar-decide-flash
+    provider: decisions
+    model: upstage/solar-decide-flash
+    enabled: false
+
+  # --- Cheap production LLMs (Haiku-class only), for latency / cost / quality comparison --------------------------------
+  # price_in / price_out are USD per 1M tokens, used only if OpenRouter omits usage.cost.
+  # `extra` is merged into the request body, e.g. to turn reasoning off for a fair latency test.
+# `rpm` caps requests per minute client-side. New OpenRouter accounts get 20 rpm on some
+# OpenAI/Anthropic models; raise or remove it once your account limit goes up.
+  - name: haiku-5.5
+    provider: llm
+    model: anthropic/claude-haiku-5.5
+    price_in: 0.10
+    price_out: 0.50
+
+  - name: gpt-6-luna
+    rpm: 18
+    provider: llm
+    model: openai/gpt-6-luna
+    price_in: 0.10
+    price_out: 0.50
+    extra: {reasoning: {effort: minimal}}
+
+  - name: gemini-3.5-flash-lite
+    provider: llm
+    model: google/gemini-3.5-flash-lite
+    price_in: 0.30
+    price_out: 2.50
+
+  - name: deepseek-v4-flash
+    provider: llm
+    model: deepseek/deepseek-v4-flash
+    price_in: 0.047
+    price_out: 0.095
+    extra: {reasoning: {enabled: false}}
+
+  - name: gpt-5.4-nano
+    provider: llm
+    model: openai/gpt-5.4-nano
+    rpm: 18
+    price_in: 0.20
+    price_out: 1.25
+    extra: {reasoning: {effort: minimal}}
+
+  - name: mistral-small-3.2
+    provider: llm
+    model: mistralai/mistral-small-3.2-24b-instruct
+    price_in: 0.075
+    price_out: 0.20
+
+  - name: qwen3.5-flash
+    provider: llm
+    model: qwen/qwen3.5-flash-02-23
+    price_in: 0.065
+    price_out: 0.26
+    enabled: false
+
+  - name: llama-4-scout
+    provider: llm
+    model: meta-llama/llama-4-scout
+    price_in: 0.10
+    price_out: 0.30
+    enabled: false
+
+  # Self-hosted Laya (Apache-2.0, ModernBERT + decision head) advertises a Jev-compatible
+  # HTTP server. Point base_url at it; the request body is the same as OpenRouter's.
+  # Untested here: check the server's actual route before enabling.
+  - name: laya-local
+    provider: decisions
+    model: laya
+    base_url: http://localhost:8000/v1/systemone
+    api_key_env: null
+    enabled: false
+
+  # Offline mocks with distinct speed/cost/quality profiles, for trying the UI without a key.
+  - name: mock-decider
+    provider: mock
+    model: mock
+    kind: decision
+    accuracy: 0.88
+    mock_latency_ms: 120
+    mock_cost: 0.000002
+    enabled: false
+
+  - name: mock-decider-lite
+    provider: mock
+    model: mock
+    kind: decision
+    accuracy: 0.72
+    mock_latency_ms: 60
+    mock_cost: 0.000001
+    enabled: false
+
+  - name: mock-flash-llm
+    provider: mock
+    model: mock
+    kind: llm
+    accuracy: 0.83
+    mock_latency_ms: 700
+    mock_cost: 0.00006
+    enabled: false
+
+  - name: mock-frontier-llm
+    provider: mock
+    model: mock
+    kind: llm
+    accuracy: 0.95
+    mock_latency_ms: 1900
+    mock_cost: 0.0009
+    enabled: false

@@ -1,0 +1,97 @@
+name: page_type
+description: Classify a crawled company web page so a finder app knows where people data lives.
+use_case: Crawler triage - find team/leadership pages before extracting people
+question:
+  type: choice
+  instructions: Classify this company web page by its main purpose, using the URL and the text excerpt.
+  criteria:
+    team_page: Names specific current employees or leaders along with their roles.
+    careers: Job openings or recruiting content.
+    blog_or_news: Articles, blog posts, press releases or announcements.
+    product: Product features, pricing or documentation.
+    contact: Contact details, office addresses or a contact form.
+    other: Anything else - legal pages, errors, a generic About page with no named people.
+
+examples:
+  - id: pt-01
+    state:
+      url: https://paylane.example/about/team
+      text: Meet the people behind Paylane. Mara Lindqvist - VP Engineering. Tobias Hahn - Head of Design. Anna Fischer - CEO.
+    expected: team_page
+    tags: [clear]
+  - id: pt-02
+    state:
+      url: https://paylane.example/careers
+      text: "Open roles: Senior Backend Engineer (Berlin), Product Designer (Remote). Apply now."
+    expected: careers
+    tags: [clear]
+  - id: pt-03
+    state:
+      url: https://paylane.example/blog/2026/scaling-postgres
+      text: How we scaled Postgres to 10TB - by Mara Lindqvist, VP Engineering. Last year our ledger table ...
+    expected: blog_or_news
+    tags: [distractor]
+    note: Names a person and title, but it's an article.
+  - id: pt-04
+    state:
+      url: https://paylane.example/pricing
+      text: Starter $29/mo. Growth $99/mo. Enterprise - contact sales.
+    expected: product
+    tags: [clear]
+  - id: pt-05
+    state:
+      url: https://paylane.example/contact
+      text: Get in touch. hello@paylane.example. Office - Torstrasse 1, 10119 Berlin. +49 30 0000000.
+    expected: contact
+    tags: [clear]
+  - id: pt-06
+    state:
+      url: https://paylane.example/company
+      text: "Our leadership: Anna Fischer, Chief Executive Officer. Jonas Weber, Chief Technology Officer. Lea Braun, Chief Financial Officer."
+    expected: team_page
+    tags: [edge]
+    note: The URL doesn't say team.
+  - id: pt-07
+    state:
+      url: https://paylane.example/jobs/team
+      text: Join our team! We're hiring across engineering, sales and operations. See all 23 openings.
+    expected: careers
+    tags: [adversarial]
+    note: URL and copy say 'team'.
+  - id: pt-08
+    state:
+      url: https://paylane.example/press
+      text: "Paylane raises $60M Series C led by Northlake Ventures. 'We're thrilled,' said CEO Anna Fischer."
+    expected: blog_or_news
+    tags: [distractor]
+  - id: pt-09
+    state:
+      url: https://paylane.example/legal/privacy
+      text: Privacy Policy. Last updated 1 September 2026. This policy explains how we process personal data ...
+    expected: other
+    tags: [clear]
+  - id: pt-10
+    state:
+      url: https://paylane.example/about/leadership-old
+      text: 404 - Page not found. Head back to the homepage.
+    expected: other
+    tags: [adversarial]
+  - id: pt-11
+    state:
+      url: https://paylane.example/de/ueber-uns
+      text: "Unser Team: Anna Fischer, Geschäftsführerin. Jonas Klein, Leiter Vertrieb. Mia Schulz, Leiterin Produkt."
+    expected: team_page
+    tags: [multilingual]
+  - id: pt-12
+    state:
+      url: https://paylane.example/features/routing
+      text: Smart routing sends every payment through the cheapest available rail, automatically.
+    expected: product
+    tags: [clear]
+  - id: pt-13
+    state:
+      url: https://paylane.example/about
+      text: Founded in 2019 in Berlin, Paylane's mission is to make payments invisible. We're backed by leading European investors.
+    expected: other
+    tags: [edge]
+    note: About page with no named people.
