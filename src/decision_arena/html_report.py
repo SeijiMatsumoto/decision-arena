@@ -43,11 +43,15 @@ def _state_text(state: Any) -> str:
 
 def _leaderboard(data: dict[str, Any]) -> str:
     qtype = data["question"]["type"]
-    cols = {"noul": [("AUC", "auc"), ("Brier", "brier"), ("NDCG", "ndcg")],
-            "choice": [("Macro F1", "macro_f1")],
-            "score": [("Within 1", "within_1"), ("MAE", "mae")]}[qtype]
-    head = "".join(f"<th>{h}</th>" for h in ["Model", "Accuracy", *(c for c, _ in cols),
-                                              "p50 ms", "$ / 1k", "Errors"])
+    cols = {
+        "noul": [("AUC", "auc"), ("Brier", "brier"), ("NDCG", "ndcg")],
+        "choice": [("Macro F1", "macro_f1")],
+        "score": [("Within 1", "within_1"), ("MAE", "mae")],
+    }[qtype]
+    head = "".join(
+        f"<th>{h}</th>"
+        for h in ["Model", "Accuracy", *(c for c, _ in cols), "p50 ms", "$ / 1k", "Errors"]
+    )
     rows = []
     for model, m in sorted(data["metrics"].items(), key=lambda kv: -(kv[1]["accuracy"] or 0)):
         extra = "".join(
@@ -77,12 +81,16 @@ def _grid(data: dict[str, Any]) -> str:
             label = d.get("label")
             prob = d.get("p_true")
             if prob is None:
-                prob = d.get("score") if data["question"]["type"] == "score" else d.get("confidence")
+                prob = (
+                    d.get("score") if data["question"]["type"] == "score" else d.get("confidence")
+                )
             detail = "" if prob is None else f"<div class=p>{prob:.2f}</div>"
             cls = "ok" if label == expected else "bad"
             cells.append(f"<td class={cls}>{escape(str(label))}{detail}</td>")
         tags = "".join(f"<span class=tag>{escape(t)}</span>" for t in e["tags"])
-        note = f"<details><summary>why</summary>{escape(e['note'])}</details>" if e.get("note") else ""
+        note = (
+            f"<details><summary>why</summary>{escape(e['note'])}</details>" if e.get("note") else ""
+        )
         state = escape(_state_text(e["state"])).replace("\n", "<br>")
         rows.append(
             f"<tr><td class=state><b>{escape(e['id'])}</b> {tags}<br>{state}{note}</td>"

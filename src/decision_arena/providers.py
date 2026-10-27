@@ -235,7 +235,7 @@ def llm_answer_schema(question: Question) -> dict[str, Any]:
 
 
 def llm_prompt(question: Question, example: Example) -> str:
-    if question.type == "score":
+    if isinstance(question.criteria, list):  # score levels, lowest first
         criteria = "\n".join(f"{i}: {text}" for i, text in enumerate(question.criteria))
     else:
         criteria = "\n".join(f"{key}: {text}" for key, text in question.criteria.items())
@@ -281,7 +281,9 @@ class LLMProvider(Provider):
         usage = payload.get("usage") or {}
         cost = usage.get("cost")
         if cost is None:
-            cost = self.spec.estimate_cost(usage.get("prompt_tokens"), usage.get("completion_tokens"))
+            cost = self.spec.estimate_cost(
+                usage.get("prompt_tokens"), usage.get("completion_tokens")
+            )
         return decision.model_copy(
             update={
                 "latency_ms": latency_ms,

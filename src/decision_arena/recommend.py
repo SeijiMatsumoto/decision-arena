@@ -112,7 +112,14 @@ def analyze(
     stats = {m: _model_stats(items, p) for m, p in predictions.items()}
     stats = {m: s for m, s in stats.items() if s["accuracy"] is not None}
     if not stats:
-        return {"scope": scope, "use_case": use_case, "n": len(items), "picks": [], "avoid": [], "notes": []}
+        return {
+            "scope": scope,
+            "use_case": use_case,
+            "n": len(items),
+            "picks": [],
+            "avoid": [],
+            "notes": [],
+        }
 
     top = max(stats, key=lambda m: (stats[m]["accuracy"], -(stats[m]["p50_ms"] or math.inf)))
     keys = [k for k, _, _ in items]
@@ -214,8 +221,11 @@ def analyze(
     decision = [m for m in stats if kinds.get(m) == "decision"]
     llm = [m for m in stats if kinds.get(m) == "llm"]
     if decision and llm:
+
         def best(group: list[str]) -> str:
-            return max(group, key=lambda m: (stats[m]["accuracy"], -(stats[m]["p50_ms"] or math.inf), m))
+            return max(
+                group, key=lambda m: (stats[m]["accuracy"], -(stats[m]["p50_ms"] or math.inf), m)
+            )
 
         best_d, best_l = best(decision), best(llm)
         b = sum(1 for k in keys if k in stats[best_d]["hits"] and k not in stats[best_l]["hits"])
@@ -233,7 +243,9 @@ def analyze(
         if speed:
             extras.append(f"{speed:.1f}× faster" if speed >= 1 else f"{1 / speed:.1f}× slower")
         if cost:
-            extras.append(f"{cost:.1f}× cheaper" if cost >= 1 else f"{1 / cost:.1f}× more expensive")
+            extras.append(
+                f"{cost:.1f}× cheaper" if cost >= 1 else f"{1 / cost:.1f}× more expensive"
+            )
         notes.append(
             f"Best decision model ({best_d}, {stats[best_d]['accuracy']:.0%}) vs best LLM "
             f"({best_l}, {stats[best_l]['accuracy']:.0%}): {quality}"
@@ -269,7 +281,10 @@ def analyze(
 
 
 def recommend(report: dict[str, Any]) -> dict[str, Any]:
-    kinds = {m["name"]: m.get("kind") or ("llm" if m["provider"] == "llm" else "decision") for m in report["models"]}
+    kinds = {
+        m["name"]: m.get("kind") or ("llm" if m["provider"] == "llm" else "decision")
+        for m in report["models"]
+    }
     per_dataset = {}
     pooled_items: list[tuple[str, str, list[str]]] = []
     pooled_preds: dict[str, dict[str, dict]] = defaultdict(dict)
@@ -283,7 +298,9 @@ def recommend(report: dict[str, Any]) -> dict[str, Any]:
                 for m, met in data["metrics"].items()
                 if met.get("best_threshold") is not None and met.get("accuracy") is not None
             }
-        per_dataset[name] = analyze(name, data["use_case"], items, data["predictions"], kinds, thresholds)
+        per_dataset[name] = analyze(
+            name, data["use_case"], items, data["predictions"], kinds, thresholds
+        )
         for key, expected, tags in items:
             pooled_items.append((f"{name}/{key}", expected, tags))
         for m, preds in data["predictions"].items():

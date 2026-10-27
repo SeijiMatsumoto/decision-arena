@@ -47,8 +47,13 @@ def dataset_table(name: str, data: dict[str, Any]) -> Table:
     table.add_column("Model")
     table.add_column("Acc", justify="right")
     extra: list[tuple[str, str, str]] = {
-        "noul": [("AUC", "auc", "num"), ("Brier", "brier", "num"), ("Best t", "best_threshold", "num"),
-                 ("Acc@t", "best_threshold_accuracy", "pct"), ("NDCG", "ndcg", "num")],
+        "noul": [
+            ("AUC", "auc", "num"),
+            ("Brier", "brier", "num"),
+            ("Best t", "best_threshold", "num"),
+            ("Acc@t", "best_threshold_accuracy", "pct"),
+            ("NDCG", "ndcg", "num"),
+        ],
         "choice": [("Macro F1", "macro_f1", "num")],
         "score": [("±1", "within_1", "pct"), ("MAE", "mae", "num")],
     }[qtype]
@@ -80,12 +85,20 @@ def tag_table(report: dict[str, Any]) -> Table:
                 if "error" in d:
                     continue
                 expected = examples[eid]["expected"]
-                expected = ("true" if expected else "false") if isinstance(expected, bool) else str(expected)
+                expected = (
+                    ("true" if expected else "false")
+                    if isinstance(expected, bool)
+                    else str(expected)
+                )
                 for tag in examples[eid]["tags"]:
                     hits[tag][model].append(d.get("label") == expected)
     models = [m["name"] for m in report["models"]]
-    table = Table(title="Accuracy by scenario tag (all datasets)", box=box.ROUNDED,
-                  title_justify="left", header_style="bold")
+    table = Table(
+        title="Accuracy by scenario tag (all datasets)",
+        box=box.ROUNDED,
+        title_justify="left",
+        header_style="bold",
+    )
     table.add_column("Tag")
     table.add_column("n", justify="right")
     for model in models:
@@ -93,7 +106,8 @@ def tag_table(report: dict[str, Any]) -> Table:
     for tag in sorted(hits):
         n = max(len(v) for v in hits[tag].values())
         table.add_row(
-            tag, str(n),
+            tag,
+            str(n),
             *(fmt(sum(h) / len(h)) if (h := hits[tag].get(m)) else "-" for m in models),
         )
     return table
@@ -113,7 +127,9 @@ def print_takeaways(report: dict[str, Any]) -> None:
         title = rec["scope"] + (f" - {rec['use_case']}" if rec["use_case"] else "")
         console.print(f"\n[bold]{title}[/bold] [dim](n={rec['n']})[/dim]")
         for pick in rec["picks"]:
-            console.print(f"  [green]{ROLE_LABELS[pick['role']]:>13}[/green]  {pick['model']}: {pick['why']}")
+            console.print(
+                f"  [green]{ROLE_LABELS[pick['role']]:>13}[/green]  {pick['model']}: {pick['why']}"
+            )
         for item in rec["avoid"]:
             console.print(f"  [red]{'Avoid':>13}[/red]  {item['model']}: {item['why']}")
         for note in rec["notes"]:
@@ -154,8 +170,9 @@ def cmd_list(args: argparse.Namespace) -> None:
     for col in ("Name", "Provider", "Model ID", "Enabled"):
         table.add_column(col)
     for spec in load_models(args.models_file, all_models=True):
-        table.add_row(spec.name, spec.provider, spec.model,
-                      "yes" if spec.enabled else "[dim]no[/dim]")
+        table.add_row(
+            spec.name, spec.provider, spec.model, "yes" if spec.enabled else "[dim]no[/dim]"
+        )
     console.print(table)
 
 
@@ -207,7 +224,9 @@ def cmd_snapshot(args: argparse.Namespace) -> None:
     folder = save_snapshot(report, snapshots)
     write_index(snapshots)
     write_readme_pointer(PROJECT_ROOT / "README.md", snapshots)
-    console.print(f"Saved {folder.relative_to(PROJECT_ROOT)}/ and pointed README.md at the latest snapshot")
+    console.print(
+        f"Saved {folder.relative_to(PROJECT_ROOT)}/ and pointed README.md at the latest snapshot"
+    )
 
 
 def cmd_serve(args: argparse.Namespace) -> None:
@@ -227,7 +246,9 @@ def main() -> None:
 
     run = sub.add_parser("run", help="Run models over datasets and write a report")
     run.add_argument("--models", type=lambda s: s.split(","), help="Comma-separated model names")
-    run.add_argument("--datasets", type=lambda s: s.split(","), help="Comma-separated dataset names")
+    run.add_argument(
+        "--datasets", type=lambda s: s.split(","), help="Comma-separated dataset names"
+    )
     run.add_argument("--limit", type=int, help="Only the first N examples per dataset")
     run.add_argument("--concurrency", type=int, default=8, help="In-flight requests per model")
     run.add_argument("--misses", action="store_true", help="List examples models got wrong")

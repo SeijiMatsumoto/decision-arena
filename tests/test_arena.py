@@ -77,7 +77,9 @@ def test_recommend_is_deterministic_and_flags_weak_models(tmp_path):
     datasets = load_datasets(ROOT / "datasets")
     models = [
         ModelSpec(name="perfect", provider="mock", model="mock", accuracy=1.0, mock_cost=1e-6),
-        ModelSpec(name="pricey", provider="mock", model="mock", kind="llm", accuracy=1.0, mock_cost=1e-3),
+        ModelSpec(
+            name="pricey", provider="mock", model="mock", kind="llm", accuracy=1.0, mock_cost=1e-3
+        ),
         ModelSpec(name="weak", provider="mock", model="mock", accuracy=0.5),
     ]
     report = asyncio.run(run_eval(datasets, models, tmp_path))

@@ -49,7 +49,8 @@ def expected_calibration_error(scored: list[tuple[bool, float]], bins: int = 5) 
     for y, p in scored:
         buckets[min(int(p * bins), bins - 1)].append((y, p))
     return sum(
-        len(items) / len(scored)
+        len(items)
+        / len(scored)
         * abs(sum(y for y, _ in items) / len(items) - sum(p for _, p in items) / len(items))
         for items in buckets.values()
     )
@@ -76,7 +77,7 @@ def ndcg(relevance_in_rank_order: list[bool]) -> float:
 def model_metrics(dataset: Dataset, predictions: Predictions) -> dict[str, Any]:
     question = dataset.question
     ok = [(e, predictions[e.id]) for e in dataset.examples if not predictions[e.id].error]
-    pairs = [(e.expected_label, d.label) for e, d in ok]
+    pairs = [(e.expected_label, d.label or "") for e, d in ok]
     live = [d for _, d in ok if not d.cached] or [d for _, d in ok]
     costs = [d.cost for _, d in ok if d.cost is not None]
 
@@ -115,14 +116,22 @@ def model_metrics(dataset: Dataset, predictions: Predictions) -> dict[str, Any]:
             if e.group and d.p_true is not None:
                 groups[e.group].append((e.expected_label == "true", d.p_true))
         if groups:
-            ranked = {g: [y for y, _ in sorted(items, key=lambda x: -x[1])] for g, items in groups.items()}
+            ranked = {
+                g: [y for y, _ in sorted(items, key=lambda x: -x[1])] for g, items in groups.items()
+            }
             result["ndcg"] = sum(ndcg(r) for r in ranked.values()) / len(ranked)
             result["top1_hit"] = sum(r[0] for r in ranked.values()) / len(ranked)
 
     if question.type == "score":
-        result["mae"] = sum(abs(d.score - int(e.expected_label)) for e, d in ok) / len(ok) if ok else None
+        # (expected level, predicted position, predicted level) for answers that carry a score.
+        levels = [
+            (int(e.expected_label), d.score, int(d.label))
+            for e, d in ok
+            if d.score is not None and d.label is not None
+        ]
+        result["mae"] = sum(abs(s - y) for y, s, _ in levels) / len(levels) if levels else None
         result["within_1"] = (
-            sum(abs(int(d.label) - int(e.expected_label)) <= 1 for e, d in ok) / len(ok) if ok else None
+            sum(abs(p - y) <= 1 for y, _, p in levels) / len(levels) if levels else None
         )
 
     return result
