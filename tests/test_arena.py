@@ -109,3 +109,12 @@ def test_snapshot_folder_index_and_readme_pointer(tmp_path):
     assert text.count(START) == 1 and text.count(END) == 1
     assert f"snapshots/{folder.name}/" in text
     assert text.index(START) < text.index("## Datasets")
+
+
+def test_equal_costs_and_latencies_have_equal_ranks_regardless_of_order():
+    from decision_arena.recommend import _rank
+
+    values = {"a": 0.0, "b": 0.0, "c": 10.0, "d": None, "e": None}
+    expected = {"a": 0, "b": 0, "c": 1, "d": 2, "e": 2}
+    assert _rank(values) == expected
+    assert _rank(dict(reversed(list(values.items())))) == expected

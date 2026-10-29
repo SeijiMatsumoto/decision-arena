@@ -96,9 +96,10 @@ def _describe(s: dict[str, Any]) -> str:
 
 
 def _rank(values: dict[str, float | None]) -> dict[str, int]:
-    """Rank ascending; missing values rank last."""
-    order = sorted(values, key=lambda m: (values[m] is None, values[m] or 0))
-    return {m: i for i, m in enumerate(order)}
+    """Rank ascending with equal ranks for ties; missing values rank last."""
+    levels = sorted(set(values.values()), key=lambda value: (value is None, value or 0))
+    ranks = {value: rank for rank, value in enumerate(levels)}
+    return {name: ranks[value] for name, value in values.items()}
 
 
 def analyze(
