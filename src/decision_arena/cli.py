@@ -19,6 +19,7 @@ from .providers import load_models
 from .recommend import recommend
 from .runner import run_eval, save_report
 from .snapshot import render, save_snapshot, write_index, write_readme_pointer
+from .summary import write_summary
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 console = Console()
@@ -222,6 +223,7 @@ def cmd_snapshot(args: argparse.Namespace) -> None:
         return
     snapshots = PROJECT_ROOT / "snapshots"
     folder = save_snapshot(report, snapshots)
+    write_summary(report, PROJECT_ROOT, folder)
     write_index(snapshots)
     write_readme_pointer(PROJECT_ROOT / "README.md", snapshots)
     console.print(

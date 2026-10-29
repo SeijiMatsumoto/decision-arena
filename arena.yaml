@@ -1,0 +1,17 @@
+# Hand-written metadata for the arenas hub (https://github.com/SeijiMatsumoto/arenas).
+# Edit, then `uv run arena-kit refresh` to re-apply it to snapshots/latest.json.
+name: decision-arena
+title: Decision Arena
+question: "For bounded classification (pick a label, yes/no, a score), should a decision model like Jev make the call, or a cheap LLM?"
+repo: https://github.com/SeijiMatsumoto/decision-arena
+data: 119 examples across 8 bounded decision tasks (lead relevance, entity resolution, page type, ticket urgency, ...), tagged by scenario.
+labels:
+  source: hand-written
+  note: About 120 hand-labeled examples; enough to spot differences between models, not to rank close ones.
+outcome:
+  status: pending
+  note: Not yet recorded which enable-ai decisions moved because of this result.
+caveats:
+  - Most models score 95%+ on these datasets, so the pick is driven by cost and speed; harder or real examples are needed to separate them on quality.
+  - Treat a 1-2 point accuracy gap as noise at this sample size.
+  - LLM reasoning is turned off where possible so latency comparisons are fair.
