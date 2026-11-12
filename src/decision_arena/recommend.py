@@ -210,8 +210,9 @@ def analyze(
     n = len(items)
     if sum(s["accuracy"] >= SATURATION for s in stats.values()) > len(stats) / 2:
         notes.append(
-            f"Most models score at least {SATURATION:.0%} here, so this dataset does not separate them "
-            "on quality; the picks are driven by cost and speed. Add harder or real examples."
+            f"Most models score at least {SATURATION:.0%} here. High scores alone do not establish "
+            "equivalent quality; inspect paired comparisons and category results. "
+            "Real examples and independent labels are needed to establish generalization."
         )
     elif n < 50:
         notes.append(

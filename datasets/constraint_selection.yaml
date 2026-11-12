@@ -1,0 +1,231 @@
+name: constraint_selection
+description: Choose the feasible option under explicit hard constraints.
+use_case: Choose the feasible option under explicit hard constraints.
+question:
+  type: choice
+  instructions: Choose A or B only if it satisfies every hard requirement. Ignore stated preferences unless
+    both options qualify, then apply the supplied preference or tie-breaker. Choose none when neither qualifies.
+    All necessary values are supplied; do not infer exceptions. Currency, time intervals, and units have their
+    stated meaning. For scheduling, an available interval must contain the entire meeting.
+  criteria:
+    A: Option A is the selected feasible option.
+    B: Option B is the selected feasible option.
+    none: Neither option satisfies every hard requirement.
+examples:
+- id: constraint_selection-v3-01
+  state: 'Requirements: budget <=100 USD, at least 8 GB RAM. A: USD 100, 8 GB. B: USD 90, 4 GB.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-11
+  state: 'Requirements: budget <=100 USD, at least 8 GB RAM. A: USD 101, 16 GB. B: USD 99, 8 GB.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-21
+  state: 'Requirements: budget <=100 USD, at least 8 GB RAM. A: USD 110, 16 GB. B: USD 90, 4 GB.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-02
+  state: 'Requirements: nonstop flight arriving by 18:00. A: nonstop, arrival 17:50. B: one stop, arrival 17:00.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-12
+  state: 'Requirements: nonstop flight arriving by 18:00. A: nonstop, arrival 18:01. B: nonstop, arrival 18:00.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-22
+  state: 'Requirements: nonstop flight arriving by 18:00. A: one stop, arrival 17:00. B: nonstop, arrival 18:30.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-03
+  state: 'Requirements: 30-minute meeting entirely within 14:00-15:00 UTC. A: 14:30-15:00. B: 14:45-15:15.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-13
+  state: 'Requirements: 30-minute meeting entirely within 14:00-15:00 UTC. A: 13:45-14:15. B: 14:00-14:30.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-23
+  state: 'Requirements: 30-minute meeting entirely within 14:00-15:00 UTC. A: 13:30-14:00. B: 15:00-15:30.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-04
+  state: 'Requirements: EU hosting and encryption at rest. A: EU, encrypted. B: US, encrypted.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-14
+  state: 'Requirements: EU hosting and encryption at rest. A: EU, unencrypted. B: EU, encrypted.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-24
+  state: 'Requirements: EU hosting and encryption at rest. A: US, encrypted. B: EU, unencrypted.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-05
+  state: 'Requirements: vegetarian meal, no peanuts. A: lentils, no peanuts, no meat. B: chicken, no peanuts.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-15
+  state: 'Requirements: vegetarian meal, no peanuts. A: tofu with peanut sauce. B: vegetable rice, no peanuts
+    or meat.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-25
+  state: 'Requirements: vegetarian meal, no peanuts. A: beef stew. B: vegetarian noodles with peanuts.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-06
+  state: 'Requirements: vendor SLA >=99.9%, monthly price <=200. A: 99.95%, 190. B: 99.8%, 150.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-16
+  state: 'Requirements: vendor SLA >=99.9%, monthly price <=200. A: 99.99%, 210. B: 99.9%, 200.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-26
+  state: 'Requirements: vendor SLA >=99.9%, monthly price <=200. A: 99.8%, 190. B: 99.95%, 201.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-07
+  state: 'Requirements: refundable room, two beds. A: refundable, two beds. B: nonrefundable, three beds.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-17
+  state: 'Requirements: refundable room, two beds. A: refundable, one bed. B: refundable, two beds.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-27
+  state: 'Requirements: refundable room, two beds. A: nonrefundable, two beds. B: refundable, one bed.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-08
+  state: 'Requirements: file limit at least 20 MB, export enabled. A: 25 MB, export yes. B: 50 MB, export no.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-18
+  state: 'Requirements: file limit at least 20 MB, export enabled. A: 19 MB, export yes. B: 20 MB, export yes.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-28
+  state: 'Requirements: file limit at least 20 MB, export enabled. A: 10 MB, export yes. B: 100 MB, export
+    no.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-09
+  state: 'Hard requirement: delivery by June 5. Preference: lower price if both qualify. A: June 4, USD 30.
+    B: June 5, USD 40.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-19
+  state: 'Hard requirement: delivery by June 5. Preference: lower price if both qualify. A: June 4, USD 50.
+    B: June 5, USD 40.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-29
+  state: 'Hard requirement: delivery by June 5; budget <=40. A: June 6, USD 20. B: June 5, USD 45.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-10
+  state: 'Hard requirement: at least 10 seats. Both qualify: A 10 seats, B 12 seats. Explicit tie-breaker:
+    choose A.'
+  expected: A
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-20
+  state: 'Hard requirement: at least 10 seats. Both qualify: A 10 seats, B 12 seats. Explicit tie-breaker:
+    choose B.'
+  expected: B
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: constraint_selection-v3-30
+  state: 'Hard requirement: at least 10 seats and offline support. A: 10 seats, online only. B: 8 seats, offline
+    supported.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

@@ -11,7 +11,7 @@ one line with its model ID.
 <!-- snapshot:start -->
 ## Latest results
 
-**[2026-11-12 snapshot](snapshots/2026-11-12_1537/)**: Use **jev-1.14** (100% accurate, 132ms median, $0.0181 per 1k calls). Best decision model (jev-1.14, 100%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.5× faster and 3.2× cheaper.
+**[2026-11-12 snapshot](snapshots/2026-11-12_1614/)**: Use **gemini-decision-1** (98% accurate, 284ms median, $0.0219 per 1k calls). Best decision model (gemini-decision-1, 98%) vs best LLM (gpt-6-luna, 98%): no significant accuracy difference; the decision model is 8.8× faster and 1.9× cheaper.
 
 Full tables and per-use-case picks are in the snapshot; all runs are listed in [`snapshots/`](snapshots/).
 <!-- snapshot:end -->
@@ -69,6 +69,43 @@ appears in Run evals and Playground. The [comparison protocol](EXPERIMENT.md) us
 | `decisions` | OpenRouter `POST /api/alpha/decisions`. Jev, Luna Decisions, Microsoft Decision-1, Liquid D1, Clef, ... Set `base_url` for a Jev-compatible self-hosted server (e.g. Laya). |
 | `llm`       | A normal chat model forced into the same label space via JSON schema. Enabled by default (cheap, Haiku-class only): Haiku 5.5, GPT-6 Luna, Gemini 3.5 Flash-Lite, DeepSeek V4 Flash. They answer the question: does the decision model beat a cheap LLM on speed and cost, and how much quality does that cost? |
 | `mock`      | Deterministic noisy oracle, for testing the pipeline offline.               |
+
+## Diverse 500-example study
+
+The suite contains 200 previous examples across eight tasks and 300 new examples across ten
+categories. Every new category has 30 examples, balanced ten per label. All evidence and rules
+are supplied in the input; fictional policies test instruction following rather than legal,
+financial, or platform-policy expertise.
+
+| New category | Decision |
+|---|---|
+| Evidence sufficiency | Supported, contradicted, insufficient |
+| Policy eligibility | Eligible, ineligible, needs review |
+| Temporal status | Active, inactive, unknown |
+| Document consistency | Consistent, conflict, unresolved |
+| Workflow completion | Complete, blocked, awaiting input |
+| Transaction reconciliation | Match, mismatch, unresolved |
+| Change impact | Breaking, compatible, insufficient |
+| Commitment detection | Firm, tentative, none |
+| Constraint selection | A, B, neither |
+| Content boundaries | Allowed, restricted, needs review |
+
+Examples include conflicting records, missing evidence, exact boundaries, exceptions, unit
+conversions, quoted text, negation, conditional promises, multilingual snippets, and paired
+constraint changes. Related examples reduce statistical independence. The new labels are
+assistant-authored and have not been independently human-reviewed.
+
+Reproduce the frozen five-model configuration:
+
+```bash
+uv run python scripts/freeze_diverse_study.py
+uv run arena --models-file studies/diverse-500/models.yaml run --fresh --attempts 1 --concurrency 2 --out reports/diverse-500.json
+uv run python scripts/finalize_diverse_study.py
+```
+
+The dated snapshot includes an equal-weight average of the 18 category accuracies and separate
+previous-200/new-300 results, with failures counted wrong. The pooled recommendation rule remains
+unchanged. See [the protocol](EXPERIMENT.md#diverse-500-example-study).
 
 ## Metrics
 
@@ -134,4 +171,4 @@ Other uses that fit the same pattern:
 
 - Model IDs come from OpenRouter's Jev guide (Oct 2026). Not every model necessarily supports every question type; unsupported ones show up as per-example errors, not crashes.
 - `laya-local` is untested; check the self-hosted server's actual route before enabling it.
-- The current dataset has 200 synthetic examples: 119 original hand-written examples plus 81 assistant-authored examples and labels that have not been independently human-reviewed. This is an exploratory comparison, not a powered study; small accuracy gaps do not establish a quality winner. The expansion was written after seeing earlier results and is not a blind held-out test.
+- The current dataset has 500 synthetic examples across 18 categories: 119 original hand-written examples plus 381 assistant-authored examples and labels that have not been independently human-reviewed. The latest expansion adds 30 label-balanced examples in each of 10 new categories. This is an exploratory comparison, not a powered study; small accuracy gaps do not establish a quality winner. The expansion was written after seeing earlier results and is not a blind held-out test.

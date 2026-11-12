@@ -1,0 +1,7 @@
+{
+  "cache_directory": ".cache/fresh-20261112T160317121810Z",
+  "command": "uv run arena --models-file studies/diverse-500/models.yaml run --fresh --attempts 1 --concurrency 2 --out reports/diverse-500.json",
+  "requests_planned": 2500,
+  "planning_ceiling_usd": 0.5,
+  "inputs_frozen_before_inference": true
+}

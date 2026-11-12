@@ -1,0 +1,238 @@
+name: change_impact
+description: Classify compatibility of a proposed API change for a supplied consumer.
+use_case: Classify compatibility of a proposed API change for a supplied consumer.
+question:
+  type: choice
+  instructions: Judge the specified consumer under the stated compatibility contract, not general taste. Breaking
+    means a previously valid required consumer operation will fail or materially change. Compatible means the
+    supplied contract and consumer establish no such break. Insufficient means necessary behavior or consumer
+    information is missing. Ignore cosmetic/internal changes when explicitly guaranteed not to affect the consumer.
+  criteria:
+    breaking: Known required consumer behavior breaks.
+    compatible: Consumer remains compatible under explicit guarantees.
+    insufficient: Cannot determine compatibility from supplied facts.
+examples:
+- id: change_impact-v3-01
+  state: Consumer sends field name customer_id. New API removes customer_id with no alias; consumer is unchanged.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-11
+  state: API adds optional response field trace_id. Consumer explicitly ignores all unknown fields; old fields
+    and semantics unchanged.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-21
+  state: API adds a response field. Consumer handling of unknown fields is unknown.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-02
+  state: Consumer requires HTTP 200 on success. New API returns 204 only; consumer rejects all other status
+    codes.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-12
+  state: API adds optional request field theme with a default preserving old behavior; existing consumer omits
+    it.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-22
+  state: Default page size changes from 20 to 50. No information about consumer pagination assumptions.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-03
+  state: Consumer parses balance as an integer number of cents. API changes same field to a decimal string
+    of dollars without versioning.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-13
+  state: Internal database index changed; contract tests guarantee identical API response values, types, and
+    ordering.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-23
+  state: Return type changes from integer to string. Consumer parser behavior is not supplied.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-04
+  state: Existing consumer omits region because it was optional. New API makes region required and rejects
+    missing values.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-14
+  state: API adds a new /v2 route; the existing /v1 route used by this consumer is explicitly unchanged.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-24
+  state: Authentication provider changes. No token migration or consumer authentication details supplied.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-05
+  state: Consumer calls GET /v1/items. New service removes this route with no redirect or replacement support.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-15
+  state: Request limit increases from 100 to 200 per minute with no other changes; consumer sends 50 per minute.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-25
+  state: Endpoint renamed. No information about aliases or which route the consumer calls.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-06
+  state: Consumer treats timeout omitted as 30 seconds and needs jobs up to 20 seconds. New default is 5 seconds
+    and cancels longer jobs.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-16
+  state: Consumer uses UTC timestamps with explicit offset parsing; API changes +00:00 to Z, and parser explicitly
+    accepts both.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-26
+  state: Enum gains a new value. Consumer handling of unfamiliar values is unknown.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-07
+  state: Consumer uses token scope read_basic. Endpoint now requires read_admin; existing token is rejected.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-17
+  state: API adds a documented nullable optional description; consumer already handles absence and null; other
+    behavior unchanged.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-27
+  state: Timeout decreases. Consumer operation durations and timeout needs are not supplied.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-08
+  state: Consumer expects a JSON array and iterates it. New response is an object wrapping that array; consumer
+    not updated.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-18
+  state: Response object key order changes; consumer looks up fields by key and explicitly ignores order.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-28
+  state: Library release notes say refactored serialization. No behavioral contract or output comparison provided.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-09
+  state: Consumer requires results sorted ascending by timestamp. New API explicitly reverses order without
+    a flag.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-19
+  state: Error message wording changes; consumer branches only on unchanged stable error code, not message
+    text.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-29
+  state: API drops deprecated field legacy_id. It is unknown whether this consumer reads it.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-10
+  state: Consumer submits files up to 8 MB under the old 10 MB limit. New limit is 5 MB and rejects larger
+    uploads.
+  expected: breaking
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-20
+  state: API accepts an additional file type. Existing accepted types and all behavior for this consumer remain
+    unchanged.
+  expected: compatible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: change_impact-v3-30
+  state: New response may contain nulls. No information about which fields or consumer null handling.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

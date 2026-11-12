@@ -1,0 +1,32 @@
+models:
+- name: gemini-decision-1
+  provider: decisions
+  model: google/gemini-decision-1
+  price_in: 0.1
+  price_out: 0.0
+  max_attempts: 1
+- name: jev-1.14
+  provider: decisions
+  model: typesafe/jev-1.14
+  max_attempts: 1
+- name: luna-decisions
+  provider: decisions
+  model: openai/gpt-6-luna-decisions
+  price_in: 0.1
+  price_out: 0.0
+  max_attempts: 1
+- name: haiku-5.5
+  provider: llm
+  model: anthropic/claude-haiku-5.5
+  price_in: 0.1
+  price_out: 0.5
+  max_attempts: 1
+- name: gpt-6-luna
+  provider: llm
+  model: openai/gpt-6-luna
+  price_in: 0.1
+  price_out: 0.5
+  extra:
+    reasoning:
+      effort: minimal
+  max_attempts: 1

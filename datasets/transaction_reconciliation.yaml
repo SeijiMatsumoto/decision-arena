@@ -1,0 +1,228 @@
+name: transaction_reconciliation
+description: Reconcile a payment against an invoice using explicit accounting rules.
+use_case: Reconcile a payment against an invoice using explicit accounting rules.
+question:
+  type: choice
+  instructions: Reconcile the stated target invoice. Match requires confirmed settled net payments equal to
+    the invoice amount in the same currency, with explicit invoice linkage. Sum linked split payments; subtract
+    confirmed refunds and chargebacks; subtract processor fees only when stated as withheld from a gross payment.
+    Pending payments do not count. Mismatch means fully specified confirmed linked net amount differs from
+    the invoice. Unresolved means missing currency, linkage, settlement, or conversion information prevents
+    a conclusive result. Do not infer exchange rates or link on amount alone.
+  criteria:
+    match: Confirmed linked net payments equal invoice amount.
+    mismatch: Confirmed linked net payments differ from invoice amount.
+    unresolved: Necessary reconciliation evidence is missing.
+examples:
+- id: transaction_reconciliation-v3-01
+  state: Invoice I1 USD 100. Settled payment USD 100 explicitly for I1; no refunds or fees.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-11
+  state: Invoice I11 USD 100. Only linked settled payment USD 90; ledger complete, no adjustments.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-21
+  state: Invoice I21 USD 100. A settled USD 100 transfer has no invoice reference; linkage unknown.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-02
+  state: 'Invoice I2 USD 100. Two settled linked payments: USD 40 and USD 60. No adjustments.'
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-12
+  state: Invoice I12 USD 100. Linked settled USD 110; no refund or fees, ledger complete.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-22
+  state: Invoice I22 EUR 100. Linked settled USD 110; no conversion rate or settled EUR amount provided.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-03
+  state: Invoice I3 EUR 95. Linked settled gross EUR 100; processor withheld EUR 5; net EUR 95.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-13
+  state: Invoice I13 EUR 100. Linked gross settled EUR 100 with EUR 3 withheld fees; net EUR 97.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-23
+  state: Invoice I23 amount 50, currency absent. Linked settled USD 50; invoice currency unknown.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-04
+  state: Invoice I4 USD 80. Linked settled payment USD 100 and confirmed linked refund USD 20; no fees.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-14
+  state: Invoice I14 USD 80. Linked settled USD 100 minus confirmed refund USD 30; complete ledger.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-24
+  state: Invoice I24 USD 100. Linked payment USD 100; settlement status unavailable.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-05
+  state: Invoice I5 GBP 50. Linked settled GBP 50; unrelated GBP 50 payment belongs to a different invoice.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-15
+  state: Invoice I15 GBP 50. Linked settled GBP 20 and GBP 20, no other payments or adjustments.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-25
+  state: Invoice I25 USD 100. Linked gross payment USD 100; processor fees may have been withheld but amount
+    unknown.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-06
+  state: Invoice I6 USD 0. Linked settled USD 20 and confirmed full USD 20 refund; no fees.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-16
+  state: Invoice I16 USD 10. Linked settlement USD 10 then confirmed full USD 10 chargeback; ledger complete.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-26
+  state: Invoice I26 USD 100. Linked settled USD 100; a refund is confirmed but amount redacted.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-07
+  state: Invoice I7 CAD 150. Linked settled CAD 100 plus CAD 50; pending extra CAD 20 does not count.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-17
+  state: Invoice I17 CAD 150. Linked settled CAD 100 plus pending CAD 50; these are all records.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-27
+  state: Invoice I27 USD 200. Ledger excerpt shows one linked USD 100 settlement; remaining ledger is missing.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-08
+  state: Invoice I8 USD 99.99. Linked settlement USD 99.99, no adjustments.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-18
+  state: Invoice I18 USD 99.99. Linked settled USD 100.00; no adjustments or tolerance allowed.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-28
+  state: Invoice I28 USD 50. Settlement listed as 50 with no currency; invoice reference matches.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-09
+  state: Invoice I9 EUR 200. Linked settled EUR 250 minus confirmed chargeback EUR 50.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-19
+  state: Invoice I19 EUR 200. Linked settled EUR 200 plus duplicate second settled EUR 200; no refunds.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-29
+  state: Invoice I29 USD 100. A transfer references either I29 or I30; transfer USD 100 settled; allocation
+    not known.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-10
+  state: Factura I10 de USD 30; pago liquidado USD 30, vinculado explícitamente a I10; sin ajustes.
+  expected: match
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-20
+  state: Invoice I20 USD 60. Complete ledger explicitly confirms no settled payments; one pending USD 60 payment.
+  expected: mismatch
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: transaction_reconciliation-v3-30
+  state: Invoice I30 EUR 100. Linked payment settled; amount unavailable.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

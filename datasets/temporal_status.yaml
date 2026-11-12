@@ -1,0 +1,229 @@
+name: temporal_status
+description: Determine whether a permission or agreement is currently active.
+use_case: Determine whether a permission or agreement is currently active.
+question:
+  type: choice
+  instructions: Use the supplied as_of instant only. A start is inclusive and an end exclusive. Revocation
+    is effective at its stated instant. A stated signed amendment supersedes prior dates. Classify active,
+    inactive (not yet started, ended, or revoked), or unknown when required dates or precedence cannot be established.
+    All time zones are explicit; do not infer an unspecified time zone.
+  criteria:
+    active: Valid at as_of.
+    inactive: Definitely not valid at as_of.
+    unknown: Validity cannot be established.
+examples:
+- id: temporal_status-v3-01
+  state: as_of 2026-06-01T00:00Z; start 2026-06-01T00:00Z; end 2026-07-01T00:00Z.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-11
+  state: as_of 2026-07-01T00:00Z; start 2026-06-01T00:00Z; end 2026-07-01T00:00Z.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-21
+  state: as_of 2026-06-01T12:00Z; end is June 1 at 12:00 in an unspecified time zone; start was in May.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-02
+  state: as_of 2026-06-15T12:00Z; permission starts 2026-06-01T00:00Z, ends 2026-06-20T00:00Z.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-12
+  state: as_of 2026-05-31T23:59Z; start 2026-06-01T00:00Z; end July 1 00:00Z.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-22
+  state: as_of 2026-06-15T00:00Z; agreement start known to be June 1; expiration field missing, not stated
+    indefinite.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-03
+  state: as_of 2026-06-01T15:00Z; start 2026-06-01T10:00-05:00; end 2026-06-02T10:00-05:00.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-13
+  state: as_of 2026-06-05T12:00Z; start June 1 00:00Z; revocation effective June 5 12:00Z, all 2026.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-23
+  state: Agreement dates are complete, but as_of is not provided.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-04
+  state: Original end June 1 00:00Z; signed amendment extends end to July 1 00:00Z. Start May 1 00:00Z. as_of
+    June 15 00:00Z, 2026.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-14
+  state: Original end July 1 00:00Z; signed amendment shortens end to June 1 00:00Z. as_of June 15 00:00Z;
+    start May 1, all 2026.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-24
+  state: as_of 2026-07-01T00:00Z; two signed amendments give different end dates, no precedence or signing
+    dates known.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-05
+  state: as_of 2026-01-01T00:00Z; start 2025-01-01T00:00Z; explicitly no expiration and no revocation.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-15
+  state: as_of 2026-06-01T14:59Z; start 2026-06-01T10:00-05:00; no expiration.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-25
+  state: as_of 2026-08-01T00:00Z; permission was revoked at an unknown time during August 1 UTC.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-06
+  state: as_of 2026-06-05T11:59Z; start June 1 00:00Z; revocation effective June 5 12:00Z; no other end.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-16
+  state: as_of 2026-08-10T11:00+02:00; start 2026-08-10T07:00Z; end 2026-08-10T09:00Z.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-26
+  state: as_of 2026-06-01T00:00Z; start date redacted; end July 1 00:00Z.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-07
+  state: as_of 2026-04-01T00:00Z; start March 1 00:00Z; end April 1 01:00Z, all 2026.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-17
+  state: as_of 2027-01-01T00:00Z; start 2026-01-01T00:00Z; end 2027-01-01T00:00Z.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-27
+  state: as_of 2026-11-01T00:00Z; contract starts when the customer signs; signature status unknown.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-08
+  state: as_of 2026-12-31T23:59Z; interval 2026-01-01T00:00Z through 2027-01-01T00:00Z exclusive.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-18
+  state: Permission was explicitly revoked permanently in 2025; as_of 2026-01-01T00:00Z; never reinstated.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-28
+  state: as_of 2026-05-01T00:00Z; status says active but is explicitly stale; current validity dates unavailable.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-09
+  state: as_of 2026-08-10T10:00+02:00; start 2026-08-10T07:00Z; end 2026-08-10T09:00Z.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-19
+  state: as_of 2026-09-01T00:00Z; start 2026-10-01T00:00Z; no end.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-29
+  state: as_of 2026-09-01T12:00Z; end was extended orally but the effective end date is unknown; original end
+    August 31.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-10
+  state: as_of 2026-03-01T00:00Z; start 2026-02-28T00:00Z; end 2026-03-02T00:00Z.
+  expected: active
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-20
+  state: as_of 2026-02-28T00:00Z; agreement expired 2026-02-27T23:59Z.
+  expected: inactive
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: temporal_status-v3-30
+  state: as_of 2026-06-01T12:00Z; start is 09:00 June 1 local time, location and time zone missing; no end.
+  expected: unknown
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

@@ -1,0 +1,177 @@
+{
+  "gemini-decision-1": {
+    "category_mean_accuracy": 0.9851851851851852,
+    "categories": {
+      "agent_action_risk": 1.0,
+      "change_impact": 1.0,
+      "commitment_detection": 1.0,
+      "company_match": 1.0,
+      "constraint_selection": 0.9666666666666667,
+      "content_boundaries": 1.0,
+      "document_consistency": 0.9333333333333333,
+      "entity_resolution": 1.0,
+      "evidence_sufficiency": 0.9666666666666667,
+      "lead_relevance": 1.0,
+      "page_type": 1.0,
+      "policy_eligibility": 0.9666666666666667,
+      "reply_intent": 1.0,
+      "support_routing": 1.0,
+      "temporal_status": 0.9333333333333333,
+      "ticket_urgency": 0.9666666666666667,
+      "transaction_reconciliation": 1.0,
+      "workflow_completion": 1.0
+    },
+    "cohorts": {
+      "previous_200": {
+        "correct": 199,
+        "n": 200,
+        "accuracy": 0.995
+      },
+      "new_300": {
+        "correct": 293,
+        "n": 300,
+        "accuracy": 0.9766666666666667
+      }
+    }
+  },
+  "jev-1.14": {
+    "category_mean_accuracy": 0.9685185185185186,
+    "categories": {
+      "agent_action_risk": 1.0,
+      "change_impact": 1.0,
+      "commitment_detection": 1.0,
+      "company_match": 1.0,
+      "constraint_selection": 1.0,
+      "content_boundaries": 0.9666666666666667,
+      "document_consistency": 0.8666666666666667,
+      "entity_resolution": 1.0,
+      "evidence_sufficiency": 1.0,
+      "lead_relevance": 0.9333333333333333,
+      "page_type": 1.0,
+      "policy_eligibility": 0.8666666666666667,
+      "reply_intent": 1.0,
+      "support_routing": 1.0,
+      "temporal_status": 0.8333333333333334,
+      "ticket_urgency": 1.0,
+      "transaction_reconciliation": 0.9666666666666667,
+      "workflow_completion": 1.0
+    },
+    "cohorts": {
+      "previous_200": {
+        "correct": 198,
+        "n": 200,
+        "accuracy": 0.99
+      },
+      "new_300": {
+        "correct": 285,
+        "n": 300,
+        "accuracy": 0.95
+      }
+    }
+  },
+  "luna-decisions": {
+    "category_mean_accuracy": 0.9350592885375494,
+    "categories": {
+      "agent_action_risk": 0.9565217391304348,
+      "change_impact": 0.9666666666666667,
+      "commitment_detection": 1.0,
+      "company_match": 0.9545454545454546,
+      "constraint_selection": 0.8666666666666667,
+      "content_boundaries": 0.9666666666666667,
+      "document_consistency": 0.9333333333333333,
+      "entity_resolution": 1.0,
+      "evidence_sufficiency": 1.0,
+      "lead_relevance": 0.9,
+      "page_type": 1.0,
+      "policy_eligibility": 0.7666666666666667,
+      "reply_intent": 0.92,
+      "support_routing": 1.0,
+      "temporal_status": 0.7333333333333333,
+      "ticket_urgency": 1.0,
+      "transaction_reconciliation": 0.9666666666666667,
+      "workflow_completion": 0.9
+    },
+    "cohorts": {
+      "previous_200": {
+        "correct": 193,
+        "n": 200,
+        "accuracy": 0.965
+      },
+      "new_300": {
+        "correct": 273,
+        "n": 300,
+        "accuracy": 0.91
+      }
+    }
+  },
+  "haiku-5.5": {
+    "category_mean_accuracy": 0.9785858585858586,
+    "categories": {
+      "agent_action_risk": 1.0,
+      "change_impact": 0.9666666666666667,
+      "commitment_detection": 0.9666666666666667,
+      "company_match": 0.9545454545454546,
+      "constraint_selection": 0.9666666666666667,
+      "content_boundaries": 1.0,
+      "document_consistency": 0.9,
+      "entity_resolution": 1.0,
+      "evidence_sufficiency": 1.0,
+      "lead_relevance": 1.0,
+      "page_type": 1.0,
+      "policy_eligibility": 1.0,
+      "reply_intent": 0.96,
+      "support_routing": 1.0,
+      "temporal_status": 1.0,
+      "ticket_urgency": 0.9,
+      "transaction_reconciliation": 1.0,
+      "workflow_completion": 1.0
+    },
+    "cohorts": {
+      "previous_200": {
+        "correct": 195,
+        "n": 200,
+        "accuracy": 0.975
+      },
+      "new_300": {
+        "correct": 294,
+        "n": 300,
+        "accuracy": 0.98
+      }
+    }
+  },
+  "gpt-6-luna": {
+    "category_mean_accuracy": 0.9803791538574147,
+    "categories": {
+      "agent_action_risk": 0.9565217391304348,
+      "change_impact": 1.0,
+      "commitment_detection": 1.0,
+      "company_match": 0.8636363636363636,
+      "constraint_selection": 1.0,
+      "content_boundaries": 1.0,
+      "document_consistency": 1.0,
+      "entity_resolution": 1.0,
+      "evidence_sufficiency": 0.9666666666666667,
+      "lead_relevance": 0.9,
+      "page_type": 1.0,
+      "policy_eligibility": 1.0,
+      "reply_intent": 0.96,
+      "support_routing": 1.0,
+      "temporal_status": 1.0,
+      "ticket_urgency": 1.0,
+      "transaction_reconciliation": 1.0,
+      "workflow_completion": 1.0
+    },
+    "cohorts": {
+      "previous_200": {
+        "correct": 192,
+        "n": 200,
+        "accuracy": 0.96
+      },
+      "new_300": {
+        "correct": 299,
+        "n": 300,
+        "accuracy": 0.9966666666666667
+      }
+    }
+  }
+}

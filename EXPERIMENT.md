@@ -101,3 +101,46 @@ Budget: 200 additional calls, estimated below $0.02, ceiling $0.05.
 Keep prior four-model snapshot and chat baseline. Combined snapshot must disclose
 that the Decisions contender was measured in a subsequent pass; never pretend
 old cached calls were fresh new latency measurements. No dataset or label edits.
+
+## Diverse 500-example study
+
+Extend the existing 200 examples unchanged with 10 categories of 30 examples:
+evidence sufficiency, policy eligibility, temporal status, document consistency,
+workflow completion, transaction reconciliation, change impact, commitment detection,
+constraint selection, and content policy boundaries. New examples and labels are
+assistant-authored synthetic data, not independent human ground truth. Use fictional
+entities and supplied rules; no external factual retrieval. Balance new category labels,
+include missing evidence, exceptions, conflicting signals, and varied representations.
+Review labels against rules and freeze hashes before inference. Prior results are known;
+this is exploratory, not a blind held-out study or production validation.
+
+Primary metric remains pooled exact accuracy with errors counted wrong. Also report
+an unweighted mean of all 18 category accuracies and separate old-200/new-300 accuracy.
+Retain the pre-existing deterministic recommendation rule; category averages are a
+sensitivity analysis, not a new post-hoc selection rule. Paired McNemar remains exploratory
+because authored examples may be dependent. A 2-point gap is not automatically meaningful.
+
+Compare Jev, Gemini Decision, OpenAI Luna Decisions, Haiku chat, and Luna chat with
+identical evidence, existing untuned prompts, concurrency 2/model, fresh cache and no
+retries. 2,500 requests. Expected inference spend below $0.30 based on prior usage;
+planning ceiling $0.50, verified against current token sizes before starting. Preserve
+all old snapshots. No push/publication or deployment is part of this extension.
+
+Final configuration: `studies/diverse-500/models.yaml` removes the legacy 18 RPM
+client cap for this study only. The key is a paid OpenRouter account; concurrency
+remains two per model. Upstream rate-limit errors are recorded, never automatically
+resent. Latency excludes client queuing and includes HTTP round trip from this machine.
+The frozen manifest includes dataset, model configuration, and measurement source hashes.
+
+```bash
+uv run python scripts/freeze_diverse_study.py
+uv run arena --models-file studies/diverse-500/models.yaml run --fresh --attempts 1 --concurrency 2 --out reports/diverse-500.json
+```
+
+Post-inference reporting correction: the old saturation boilerplate incorrectly claimed
+that most models exceeding 95% meant the dataset could not distinguish quality. Replaced
+that sentence with a caution to inspect paired comparisons and category results. Also
+replaced the blanket instruction to treat few-point gaps as noise with uncertainty/label
+cautions. No change to scoring, thresholds, selection logic, prompts, labels, or measurements.
+Frozen run source hashes remain preserved; snapshot manifest separately hashes these two
+reporting-only file revisions.

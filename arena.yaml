@@ -4,17 +4,14 @@ title: Decision Arena
 question: For bounded classification (pick a label, yes/no, a score), should a decision model like Jev
   make the call, or a cheap LLM?
 repo: https://github.com/SeijiMatsumoto/decision-arena
-data: 200 synthetic examples across 8 bounded decision tasks; 119 original plus 81 assistant-authored
-  expansion examples.
+data: 500 synthetic examples across 18 bounded decision categories; 200 previous examples plus 300 diverse expansion examples.
 labels:
   source: mixed
-  note: 119 original hand-written examples plus 81 assistant-authored synthetic examples and labels, not
-    independently human-reviewed. Exploratory; small accuracy differences remain inconclusive.
+  note: 119 original hand-written examples plus 381 assistant-authored synthetic examples and labels, not independently human-reviewed. The newest 300 are balanced across 10 new categories; exploratory and not a blind held-out test.
 outcome:
   status: pending
   note: Not yet recorded which enable-ai decisions moved because of this result.
 caveats:
-- Most models score 95%+ on these datasets, so the pick is driven by cost and speed; harder or real examples
-  are needed to separate them on quality.
+- Synthetic labels have not been independently reviewed; production data is needed to establish generalization.
 - Treat a 1-2 point accuracy gap as noise at this sample size.
 - LLM reasoning is turned off where possible so latency comparisons are fair.

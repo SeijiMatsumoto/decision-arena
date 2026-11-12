@@ -1,0 +1,229 @@
+name: workflow_completion
+description: Determine if a fixed workflow has finished or requires action.
+use_case: Determine if a fixed workflow has finished or requires action.
+question:
+  type: choice
+  instructions: A workflow is complete only when every required step is confirmed successful. Blocked means
+    a confirmed failed or rejected required step, or an explicitly unsatisfied prerequisite that prevents progress.
+    Awaiting_input means no known blocker but necessary input, approval, or status is pending or unknown. Optional
+    steps do not affect completion; skipped required steps need an explicit valid waiver. A confirmed later
+    successful retry supersedes an earlier failure.
+  criteria:
+    complete: All required steps succeeded or were explicitly waived.
+    blocked: A confirmed blocker prevents completion.
+    awaiting_input: Necessary information or approval remains pending or unknown.
+examples:
+- id: workflow_completion-v3-01
+  state: 'Required: upload, validate, publish. Log: upload success, validate success, publish success.'
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-11
+  state: Required validation failed and no successful retry exists; publication cannot proceed.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-21
+  state: Upload succeeded; required approval has been requested but no decision received.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-02
+  state: 'Required signature and payment: both confirmed. Optional survey unanswered.'
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-12
+  state: Manager explicitly rejected required approval; no waiver.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-22
+  state: Required steps A and B exist. A succeeded; B status is missing, with no confirmed failure.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-03
+  state: Import initially failed validation; corrected file retry passed; required commit step succeeded.
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-13
+  state: Payment was declined; successful payment is a required prerequisite for dispatch.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-23
+  state: Customer must choose a delivery slot before scheduling. Choice has not arrived; no invalid choice
+    or failure reported.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-04
+  state: 'Required: manager approval and archive. Manager approval explicitly waived by authorized policy exception;
+    archive succeeded.'
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-14
+  state: Required contract signature is invalid; legal review confirmed it must be replaced before work can
+    proceed.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-24
+  state: Contract draft ready; waiting for required customer signature, not yet accepted or rejected.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-05
+  state: 'Checklist: identity verified YES, contract signed YES. No other required steps.'
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-15
+  state: Build failed; tests are pending. A successful build is mandatory before tests can run.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-25
+  state: Build passed; test job submitted but no result yet. Passing tests is required.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-06
+  state: 'Backup workflow: snapshot created and restore test passed; optional notification failed.'
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-16
+  state: User supplied a file in a prohibited format; conversion is unavailable and processing cannot start.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-26
+  state: Invoice created; payment settlement pending, not declined. Settlement is required.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-07
+  state: Order workflow requires payment and dispatch. Payment settled; dispatch confirmed. Customer review
+    not required.
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-17
+  state: Required compliance check denied the request. All other checks passed.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-27
+  state: All required fields except tax jurisdiction supplied; customer has not answered that question.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-08
+  state: Required QA test succeeded on the final retry; release was published successfully afterward.
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-18
+  state: Required migration step was skipped without a waiver; deployment policy explicitly prevents continuation.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-28
+  state: QA approval requested; reviewer is away and has not issued a decision.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-09
+  state: Two required reviewers both approved. The third reviewer is explicitly optional and has not replied.
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-19
+  state: Latest retry failed after an earlier partial success; required upload has not completed.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-29
+  state: Archive request queued; no confirmation of required archival completion yet.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-10
+  state: 'Onboarding requires tax form and access setup: tax form accepted; access setup complete.'
+  expected: complete
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-20
+  state: Access setup cannot run because the license pool is exhausted; replenishment has not been approved.
+  expected: blocked
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: workflow_completion-v3-30
+  state: Required proof-of-address upload exists but its validation result is unknown.
+  expected: awaiting_input
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

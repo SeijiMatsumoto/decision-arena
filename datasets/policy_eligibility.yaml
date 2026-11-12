@@ -1,0 +1,231 @@
+name: policy_eligibility
+description: Apply a fictional returns policy including exceptions and missing facts.
+use_case: Apply a fictional returns policy including exceptions and missing facts.
+question:
+  type: choice
+  instructions: 'Policy: a return is eligible when requested within 30 calendar days of delivery (day 30 included),
+    proof of purchase exists, and item is unused. A confirmed manufacturing defect overrides the unused condition
+    and extends the window to 90 days inclusive. Final-sale items are never eligible except with a confirmed
+    manufacturing defect. Use elapsed_days supplied, not today. If any known condition conclusively disqualifies,
+    choose ineligible; otherwise missing necessary evidence means needs_review.'
+  criteria:
+    eligible: All requirements are established or the defect exception applies.
+    ineligible: At least one known condition conclusively disqualifies.
+    needs_review: No conclusive disqualifier, but necessary facts are missing.
+examples:
+- id: policy_eligibility-v3-01
+  state: Elapsed 30 days; receipt attached; unused standard item.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-11
+  state: Unused standard item with receipt; requested on day 31; explicitly no manufacturing defect.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-21
+  state: Day 10, unused standard item; proof status unknown.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-02
+  state: Elapsed 31 days; receipt attached; used item with a confirmed manufacturing defect.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-12
+  state: Used ordinary item on day 5; receipt present; damage is confirmed accidental, not manufacturing.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-22
+  state: Receipt and unused ordinary item confirmed; delivery date unavailable.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-03
+  state:
+    elapsed_days: 90
+    proof: true
+    unused: false
+    final_sale: true
+    confirmed_manufacturing_defect: true
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-13
+  state: Final-sale item on day 1, unused with receipt; no manufacturing defect.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-23
+  state: Day 15, receipt present; use status and defect status unknown; not final sale.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-04
+  state: Bought on final sale; confirmed manufacturing defect; delivery 8 days ago; order confirmation provided.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-14
+  state: Confirmed manufacturing defect on day 91; proof provided.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-24
+  state: Final-sale item on day 20, receipt; defect is alleged but not confirmed or ruled out.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-05
+  state: Unused normal item, delivered today; valid receipt.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-15
+  state: Ordinary unused item on day 10; customer confirms no proof of purchase exists.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-25
+  state: Used item, day 40, proof present; manufacturing inspection is pending.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-06
+  state: Customer opened the box but never used the item; ordinary item, day 20, proof provided.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-16
+  state: Final-sale item on day 20; proof attached, no defect; customer says they dislike the color.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-26
+  state: Unused item day 12 with proof; final-sale designation is missing and defect status unknown.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-07
+  state: Used item on day 45; technician confirms a manufacturing defect; invoice provided.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-17
+  state: Used item on day 30; receipt; technician confirmed normal wear and no manufacturing defect.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-27
+  state: Defect confirmed and receipt present; elapsed days missing.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-08
+  state: Unused standard item on day 29; digital order record is valid proof of purchase.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-18
+  state: Elapsed 100 days; condition and proof unknown. Even the defect window has expired.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-28
+  state: Day 75, used, proof attached; technician has not determined whether damage is manufacturing-related.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-09
+  state: Artículo sin usar, no es venta final; entregado hace 15 días; recibo adjunto.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-19
+  state: Confirmed manufacturing defect, day 50; customer confirms there is no proof of purchase.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-29
+  state: Day 30, unused ordinary item; the receipt is illegible and proof has not been validated.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-10
+  state: Final-sale item on day 90; confirmed factory defect and proof present.
+  expected: eligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-20
+  state: Unused standard item day 60, proof attached; defect explicitly ruled out.
+  expected: ineligible
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: policy_eligibility-v3-30
+  state: Final-sale item, confirmed factory defect, day 80; proof of purchase has not been supplied or ruled
+    out.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

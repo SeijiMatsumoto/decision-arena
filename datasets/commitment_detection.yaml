@@ -1,0 +1,285 @@
+name: commitment_detection
+description: Distinguish an accountable commitment from suggestions or quoted language.
+use_case: Distinguish an accountable commitment from suggestions or quoted language.
+question:
+  type: choice
+  instructions: 'Classify the current speaker''s commitment to perform the stated target action. Firm means
+    an explicit unconditional promise or acceptance by that speaker. Tentative means they propose it, hedge,
+    or make it conditional on an unmet condition. None means no current speaker commitment: declined, negated,
+    merely questioned, attributed to another person, or only quoted historical text. A later explicit correction
+    within the message overrides earlier text. Use stated context to resolve conditions.'
+  criteria:
+    firm: Current speaker explicitly commits without an unmet condition.
+    tentative: Current speaker proposes, hedges, or conditionally commits.
+    none: No current speaker commitment to the target action.
+examples:
+- id: commitment_detection-v3-01
+  state:
+    target: Send the report
+    message: I will send the report by 3 PM today.
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-11
+  state:
+    target: Send the report
+    message: I might send the report tomorrow if I find time.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-21
+  state:
+    target: Send the report
+    message: I will not send the report. Ask Pat instead.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-02
+  state:
+    target: Own the migration
+    message: Yes, I accept ownership of the migration.
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-12
+  state:
+    target: Own the migration
+    message: I could own the migration, subject to my manager agreeing. No agreement yet.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-22
+  state:
+    target: Own the migration
+    message: Pat said, "I will own the migration." I am only relaying Pat's message.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-03
+  state:
+    target: Attend the review
+    message: Count me in. I will attend the review on Friday.
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-13
+  state:
+    target: Attend the review
+    message: Tentatively yes, but I have not confirmed my availability.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-23
+  state:
+    target: Attend the review
+    message: Will you attend the review? I have no plans to attend myself.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-04
+  state:
+    target: Deliver the draft
+    message: I can deliver it, and I commit to sending the draft tomorrow.
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-14
+  state:
+    target: Deliver the draft
+    message: How about I deliver a draft next week? This is a proposal, not a confirmation.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-24
+  state:
+    target: Deliver the draft
+    message: 'Quoted from last year: "I will deliver the draft." That old promise does not apply to this project.'
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-05
+  state:
+    target: Fix the bug
+    message: I am taking this bug. I will fix it this afternoon.
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-15
+  state:
+    target: Fix the bug
+    message: I will fix it if the triage team assigns it to me; assignment is pending.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-25
+  state:
+    target: Fix the bug
+    message: The bug is still open. No owner has been assigned, including me.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-06
+  state:
+    target: Send the invoice
+    message: If finance approves, I will send it. Finance has now approved; I will send the invoice today.
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-16
+  state:
+    target: Send the invoice
+    message: I expect to send it tomorrow, but cannot commit yet.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-26
+  state:
+    target: Send the invoice
+    message: I said I would send it, but I withdraw that commitment and will not send it.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-07
+  state:
+    target: Book the room
+    message: 'I initially said maybe, but confirming now: I will book the room.'
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-17
+  state:
+    target: Book the room
+    message: I would book it if we get budget approval. Budget approval has not happened.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-27
+  state:
+    target: Book the room
+    message: The room has already been booked by someone else; no action from me is needed.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-08
+  state:
+    target: Review the proposal
+    message: Agreed. The proposal review is on me; I will finish it tonight.
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-18
+  state:
+    target: Review the proposal
+    message: Let me see whether I can review it by Friday.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-28
+  state:
+    target: Review the proposal
+    message: Thanks for sharing the proposal.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-09
+  state:
+    target: Enviar el contrato
+    message: 'Confirmado: enviaré el contrato mañana.'
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-19
+  state:
+    target: Enviar el contrato
+    message: Quizá pueda enviar el contrato mañana; todavía no lo confirmo.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-29
+  state:
+    target: Enviar el contrato
+    message: No voy a enviar el contrato.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-10
+  state:
+    target: Publish the notes
+    message: I promise to publish the notes after this meeting; no approval or other condition is required.
+  expected: firm
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-20
+  state:
+    target: Publish the notes
+    message: My preference is to publish them Monday, assuming legal signs off; legal has not replied.
+  expected: tentative
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: commitment_detection-v3-30
+  state:
+    target: Publish the notes
+    message: Meeting minutes record that Dana will publish the notes. I am not Dana and have made no promise.
+  expected: none
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

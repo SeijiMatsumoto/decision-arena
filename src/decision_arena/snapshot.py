@@ -106,7 +106,7 @@ def render(report: dict[str, Any], project_readme: str = "../../README.md") -> s
     datasets = list(report["datasets"])
     n_examples = sum(len(d["examples"]) for d in report["datasets"].values())
     expanded = any(
-        "synthetic-v2" in e.get("tags", [])
+        any(t in e.get("tags", []) for t in ("synthetic-v2", "synthetic-v3"))
         for data in report["datasets"].values() for e in data["examples"]
     )
     provenance = (
@@ -123,8 +123,8 @@ def render(report: dict[str, Any], project_readme: str = "../../README.md") -> s
             f"{len(rows)} models × {n_examples} examples across {len(datasets)} datasets, all called "
             "through OpenRouter. Latency is the client-side round trip from one machine, so it includes "
             "network time; cost is what OpenRouter reported per call at the time. The datasets are small "
-            f"and synthetic (see [Caveats]({project_readme}#caveats)), so treat accuracy gaps of a few "
-            "points as noise. "
+            f"and synthetic (see [Caveats]({project_readme}#caveats)); interpret accuracy gaps with "
+            "paired uncertainty and label limitations. "
             + provenance +
             "The question format (noul / choice / score) originated with Jev, and LLMs get a "
             "plain, untuned prompt. Raw data: [`report.json`](report.json)."
@@ -141,6 +141,23 @@ def render(report: dict[str, Any], project_readme: str = "../../README.md") -> s
             f"| `{r['model']}` | {kind} | {_pct(r['accuracy'])} ({r['correct']}/{r['n']}) "
             f"| {_ms(r['p50'])} | {_ms(r['p95'])} | {_usd(r['cost_per_1k'])} |"
         )
+
+    if any("synthetic-v3" in e.get("tags", [])
+           for data in report["datasets"].values() for e in data["examples"]):
+        from .study_metrics import study_metrics
+
+        lines += ["", "## Category weighting and cohorts", "",
+                  ("Errors and missing predictions count as wrong. Category mean weights each "
+                  "dataset equally; this is a sensitivity analysis, not a different pick rule."), "",
+                  "| Model | Category mean | Previous 200 | New 300 |",
+                  "|---|---:|---:|---:|"]
+        for model, metrics in study_metrics(report).items():
+            cohort_cells = []
+            for cohort in metrics["cohorts"].values():
+                cohort_cells.append(
+                    f"{_pct(cohort['accuracy'])} ({cohort['correct']}/{cohort['n']})")
+            lines.append(f"| {model} | {_pct(metrics['category_mean_accuracy'])} | "
+                         + " | ".join(cohort_cells) + " |")
 
     lines += ["", "## Accuracy by dataset", ""]
     lines.append("| Model | " + " | ".join(d.replace("_", " ") for d in datasets) + " |")

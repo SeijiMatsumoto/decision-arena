@@ -1,0 +1,241 @@
+name: content_boundaries
+description: Apply an explicit fictional community policy without relying on outside moderation standards.
+use_case: Apply an explicit fictional community policy without relying on outside moderation standards.
+question:
+  type: choice
+  instructions: 'Apply this fictional forum policy only: restricted if a post discloses another person''s private
+    phone/address without explicit consent, or requests readers direct unwanted contact at a named person.
+    Allowed if it contains neither, including non-targeted criticism, clearly fictional contact details, or
+    public business contact information used normally. Needs_review if consent, whether contact is private,
+    or whether a target is real cannot be established and affects eligibility. Quoted text is still a disclosure
+    unless contact details are redacted. Self-disclosure is allowed. Do not invent harmful details.'
+  criteria:
+    allowed: No policy restriction applies based on supplied facts.
+    restricted: A stated restriction definitely applies.
+    needs_review: Necessary privacy, consent, or target context is missing.
+examples:
+- id: content_boundaries-v3-01
+  state: 'Post: I dislike the new app update. No people or contact details mentioned.'
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-11
+  state: Post publishes a real coworker's private home address; coworker explicitly refused permission.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-21
+  state: Post contains a phone number attributed to a named person. Whether it is private or a public business
+    contact is unknown.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-02
+  state: Post shares the author's own phone number for a voluntary study group; self-disclosure explicitly
+    confirmed.
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-12
+  state: Post shares a neighbor's private phone number without consent; author confirms no permission.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-22
+  state: Post shares another person's private address; consent status is not supplied.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-03
+  state: Post lists Cedar Shop's publicly advertised customer support telephone for ordinary support requests.
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-13
+  state: Post asks readers to repeatedly send unwanted messages to a named real person until they respond.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-23
+  state: Post asks readers to annoy a named character. It is unknown whether the target is a real person or
+    fictional.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-04
+  state: 'Fiction exercise: the character lives at an explicitly invented address; all characters and contacts
+    are fictional.'
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-14
+  state: Post quotes a leaked message containing another real person's unredacted private address; no consent.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-24
+  state: Post quotes a telephone number, but ownership and whether it is private are unknown.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-05
+  state: Post criticizes a named executive's public product announcement without contact details or calls for
+    unwanted contact.
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-15
+  state: Post republishes another person's private phone even though the subject asked that it be removed and
+    never consented.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-25
+  state: Post shares a colleague's private phone. Author claims permission might have been given, but no definite
+    consent is established.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-06
+  state: Post quotes an abusive message but replaces every address and phone number with [REDACTED]; no call
+    to contact anyone.
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-16
+  state: 'Post: Everyone call the named real reviewer and bother them all night. No phone number is supplied.'
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-26
+  state: Post includes an address described only as Morgan's place; it is unclear whether this is a public
+    business or private home.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-07
+  state: Post shares another person's private phone with their explicit, verified consent to this exact public
+    post.
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-17
+  state: Post embeds a screenshot with a real person's legible private home address; consent explicitly absent.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-27
+  state: Post includes a private contact number; the author might be the subject, but identity is not established.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-08
+  state: Post asks readers to send ordinary inquiries to the business's public sales email, with no harassment
+    or private details.
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-18
+  state: Post shares a private address of a named real employee and says the employee did not agree to publication.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-28
+  state: Post says the target consented to sharing a phone in a private group; whether consent covers this
+    public post is unknown.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-09
+  state: 'Post says: Please do not contact Morgan; respect their privacy. No contact details included.'
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-19
+  state: Post requests a pile-on of unwanted contact directed at a named real moderator.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-29
+  state: Post shows a partially visible screenshot; it may expose another person's private address, but legibility
+    is undetermined.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-10
+  state: 'Post: Esta función es lenta y debería mejorar. No personal data or targeted contact request.'
+  expected: allowed
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-20
+  state: Post includes another real user's private phone number in a joke; author explicitly states no consent
+    was obtained.
+  expected: restricted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: content_boundaries-v3-30
+  state: Post lists a number as support contact, but it may be a private employee phone and publication consent
+    is unknown.
+  expected: needs_review
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

@@ -1,0 +1,286 @@
+name: evidence_sufficiency
+description: Assess whether supplied evidence establishes a claim.
+use_case: Assess whether supplied evidence establishes a claim.
+question:
+  type: choice
+  instructions: Use only supplied evidence. Supported means all material parts of the claim are established;
+    contradicted means an explicit fact falsifies at least one material part. Otherwise choose insufficient.
+    Absence of a fact is not its negation. If sources conflict without a stated precedence, choose insufficient.
+  criteria:
+    supported: Evidence establishes the complete claim.
+    contradicted: Evidence explicitly falsifies a material part of the claim.
+    insufficient: Evidence is missing, ambiguous, or unresolved.
+examples:
+- id: evidence_sufficiency-v3-01
+  state:
+    claim: Every order in batch B shipped.
+    evidence: 'Batch B contains orders 11 and 12 only. Shipment log: 11 dispatched, 12 dispatched.'
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-11
+  state:
+    claim: All three servers passed.
+    evidence: Server A PASS; server B FAIL; server C PASS.
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-21
+  state:
+    claim: The CEO approved the purchase.
+    evidence: A manager approved it; no CEO decision appears in the record.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-02
+  state:
+    claim: The service met its 99.9% monthly uptime target.
+    evidence:
+      target_percent: 99.9
+      measured_monthly_uptime_percent: 99.95
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-12
+  state:
+    claim: The total is below $100.
+    evidence:
+      total_usd: 100
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-22
+  state:
+    claim: Every customer received the notice.
+    evidence: Delivery confirmed for 80 of 100 customers; no status for the other 20.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-03
+  state:
+    claim: The contract permits cancellation without a fee after June 1.
+    evidence: 'Signed clause: effective June 1, cancellation carries no fee.'
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-13
+  state:
+    claim: No customer data left the region.
+    evidence: Audit log explicitly records customer data exported to a different region.
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-23
+  state:
+    claim: The feature caused retention to improve.
+    evidence: Retention rose after launch; there was no control group and several changes launched together.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-04
+  state:
+    claim: Mira currently leads design.
+    evidence: 'Current employee directory, effective today: Mira, Head of Design.'
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-14
+  state:
+    claim: The plan includes unlimited storage.
+    evidence: 'Signed current plan: maximum storage 50 GB; no exceptions.'
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-24
+  state:
+    claim: The package arrived undamaged.
+    evidence: Tracking says delivered; package condition was not recorded.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-05
+  state:
+    claim: The request was approved before execution.
+    evidence: 09:00 request received; 09:02 approval recorded; 09:05 execution started.
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-15
+  state:
+    claim: Nora is still employed by Cedar.
+    evidence: 'HR confirmation: Nora left Cedar last month and has not rejoined.'
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-25
+  state:
+    claim: The contract permits resale.
+    evidence: The supplied excerpt discusses invoicing only.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-06
+  state:
+    claim: Revenue increased in both quarters.
+    evidence: Q1 revenue 12, Q2 14, Q3 16. Claim refers to Q2 and Q3 versus preceding quarter.
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-16
+  state:
+    claim: The patch fixes both defects.
+    evidence: 'Verification: defect A fixed; defect B remains reproducible.'
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-26
+  state:
+    claim: The system is currently healthy.
+    evidence: Last health check was six months ago; current status unavailable.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-07
+  state:
+    claim: The replacement contains no nickel.
+    evidence: 'Certified composition of the replacement: 100% pure titanium; certificate confirms no nickel.'
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-17
+  state:
+    claim: Payment arrived before the deadline.
+    evidence: Deadline 12:00 UTC; settlement time 12:07 UTC on the same day.
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-27
+  state:
+    claim: The employee works in Berlin.
+    evidence: Their company has a Berlin office; individual location is not listed.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-08
+  state:
+    claim: The customer explicitly accepted the revised date.
+    evidence: 'Email from customer: I accept the revised delivery date of May 8.'
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-18
+  state:
+    claim: The product is made entirely from recycled material.
+    evidence: 'Composition: 60% recycled plastic, 40% virgin plastic.'
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-28
+  state:
+    claim: The balance is $50.
+    evidence: Two equally authoritative current statements show $50 and $70; neither supersedes the other.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-09
+  state:
+    claim: Both required attachments arrived.
+    evidence: 'Required: invoice and receipt. Upload inventory: invoice.pdf and receipt.pdf, both validated.'
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-19
+  state:
+    claim: The customer opted in.
+    evidence: Consent log for this customer explicitly says declined.
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-29
+  state:
+    claim: The attachment contains no personal data.
+    evidence: Only the filename summary.csv is available; contents cannot be inspected.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-10
+  state:
+    claim: El envío llegó el lunes.
+    evidence: 'Tracking record: delivered Monday, signed by recipient.'
+  expected: supported
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-20
+  state:
+    claim: The report concerns 2025 only.
+    evidence: Report scope explicitly includes both 2025 and 2026.
+  expected: contradicted
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: evidence_sufficiency-v3-30
+  state:
+    claim: The meeting was cancelled.
+    evidence: Calendar entry disappeared, but no cancellation or explanation was recorded.
+  expected: insufficient
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.

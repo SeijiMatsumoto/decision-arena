@@ -1,0 +1,285 @@
+name: document_consistency
+description: Detect material disagreement between two records.
+use_case: Detect material disagreement between two records.
+question:
+  type: choice
+  instructions: Compare only the supplied records. Consistent means all overlapping material assertions agree
+    after explicit unit conversions or rounding to the coarser stated precision. Conflict means incompatible
+    material assertions about the same scope/time. Unresolved means identities, scope, units, or meaning cannot
+    be aligned. Differences explicitly identified as historical versus current are not conflicts. A signed
+    amendment supersedes earlier terms when explicitly stated.
+  criteria:
+    consistent: Material overlapping statements agree or an explicit amendment reconciles them.
+    conflict: At least one material assertion is incompatible for the same scope/time.
+    unresolved: Insufficient context to compare.
+examples:
+- id: document_consistency-v3-01
+  state:
+    a: 'Parcel mass: 1 kg.'
+    b: 'Same parcel mass: 1000 g.'
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-11
+  state:
+    a: Order 31 final total USD 100.
+    b: Order 31 final total USD 110, same version and tax basis.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-21
+  state:
+    a: Invoice 10 total 100.
+    b: Invoice 10 total 100; currencies absent in both and may differ.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-02
+  state:
+    a: Monthly fee exactly USD 20.
+    b: 'Same plan: USD 240 annually, explicitly equal to 12 monthly fees, no discount or surcharge.'
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-12
+  state:
+    a: Current term ends June 1, 2026.
+    b: Same current term ends July 1, 2026; neither document supersedes the other.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-22
+  state:
+    a: Acme has 50 staff.
+    b: Acme has 70 staff; dates and whether these are the same Acme are unknown.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-03
+  state:
+    a: 'Approximate length rounded to whole meters: 2 m.'
+    b: Measured length 2.04 m.
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-13
+  state:
+    a: Item mass exactly 1 kg.
+    b: Same item mass exactly 100 g.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-23
+  state:
+    a: Delivery date 03/04/2026.
+    b: Delivery date April 3, 2026; first date format unspecified.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-04
+  state:
+    a: Contract original fee USD 50.
+    b: Signed amendment explicitly replaces that fee with USD 60 effective today.
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-14
+  state:
+    a: Limit is 10 MB; MB means 1000000 bytes.
+    b: Same limit is 10 MiB, MiB means 1048576 bytes.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-24
+  state:
+    a: Fee USD 20.
+    b: Fee USD 24; unknown whether either includes tax.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-05
+  state:
+    a: Order 17 contains two red chairs and one blue chair.
+    b: 'Order 17 contains three chairs: one blue, two red.'
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-15
+  state:
+    a: Customer opted out on May 1.
+    b: Customer explicitly opted in on May 1 at the exact same instant and scope.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-25
+  state:
+    a: Speed 10.
+    b: Speed 20; units missing.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-06
+  state:
+    a: Latency 0.25 seconds.
+    b: Same measured latency 250 milliseconds.
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-16
+  state:
+    a: Three units at USD 5, total USD 15.
+    b: Same invoice total USD 20, no taxes or fees.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-26
+  state:
+    a: Storage capacity 1 TB.
+    b: Usable capacity 900 GB; conversion and reserved-space definitions omitted.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-07
+  state:
+    a: 'Historical address in 2020: Boston.'
+    b: 'Current address in 2026: Austin; moved in 2024.'
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-17
+  state:
+    a: All four acceptance checks passed.
+    b: 'Same run: acceptance check 4 failed.'
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-27
+  state:
+    a: Document says the tenant may renew.
+    b: Only a redacted page is available, containing no visible renewal terms.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-08
+  state:
+    a: Shipment date 2026-05-01.
+    b: Same shipment dispatched May 1, 2026.
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-18
+  state:
+    a: Current delivery address apartment 12.
+    b: Same current delivery address apartment 21.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-28
+  state:
+    a: Project status green.
+    b: Project score 3; mapping from scores to colors unavailable.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-09
+  state:
+    a: Maximum file size 10 MiB.
+    b: Maximum file size 10485760 bytes; 1 MiB = 1048576 bytes.
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-19
+  state:
+    a: Current agreement prohibits subcontracting.
+    b: Same unamended agreement permits subcontracting without restriction.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-29
+  state:
+    a: Rounded quantity 100.
+    b: Exact quantity 104; rounding precision unspecified.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-10
+  state:
+    a: Two seats at USD 15 each, total USD 30.
+    b: Same invoice total USD 30 for two seats.
+  expected: consistent
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-20
+  state:
+    a: Exact duration 60 seconds.
+    b: Same exact duration 2 minutes.
+  expected: conflict
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
+- id: document_consistency-v3-30
+  state:
+    a: Revenue 5 million.
+    b: Revenue 6 million; reporting periods are not stated.
+  expected: unresolved
+  tags:
+  - synthetic-v3
+  note: Assistant-authored synthetic evidence and label; checked against supplied rules, not independently
+    human-reviewed.
