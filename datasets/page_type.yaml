@@ -95,3 +95,77 @@ examples:
     expected: other
     tags: [edge]
     note: About page with no named people.
+
+# Expansion v2: assistant-authored before the comparison; not human-reviewed.
+  - id: pt-v2-01
+    state:
+      url: https://oak.example/company
+      text: 'Current leadership directory: Eva Song, CEO; Malik Reed, CTO.'
+    expected: team_page
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: pt-v2-02
+    state:
+      url: https://oak.example/leadership
+      text: We are hiring our next CFO. View requirements and apply here.
+    expected: careers
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: pt-v2-03
+    state:
+      url: https://oak.example/team-news
+      text: 'Press release: Oak opens its Paris office today, CEO Eva Song announced.'
+    expected: blog_or_news
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: pt-v2-04
+    state:
+      url: https://oak.example/docs/export
+      text: 'Export API reference: POST /exports. Required fields and sample responses.'
+    expected: product
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: pt-v2-05
+    state:
+      url: https://oak.example/company
+      text: Visit our office at 12 Lake Road. Call +1 555 0100 or fill out this inquiry form.
+    expected: contact
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: pt-v2-06
+    state:
+      url: https://oak.example/team
+      text: 403 Forbidden. You do not have permission to access this page.
+    expected: other
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: pt-v2-07
+    state:
+      url: https://oak.example/terms
+      text: Terms of Service. These terms govern your use of our service.
+    expected: other
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: pt-v2-08
+    state:
+      url: https://oak.example/news
+      text: 'Compare plans: Free, Pro at $20 per month, Enterprise. Feature limits by plan.'
+    expected: product
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: pt-v2-09
+    state:
+      url: https://oak.example/equipe
+      text: 'Rejoignez notre équipe. Postes ouverts: développeur backend et designer. Envoyez votre candidature.'
+    expected: careers
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.

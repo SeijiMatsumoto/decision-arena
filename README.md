@@ -11,7 +11,7 @@ one line with its model ID.
 <!-- snapshot:start -->
 ## Latest results
 
-**[2026-11-12 snapshot](snapshots/2026-11-12_1512/)**: Use **jev-1.14** (99% accurate, 147ms median, $0.0183 per 1k calls). Best decision model (jev-1.14, 99%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.4× faster and 3.3× cheaper.
+**[2026-11-12 snapshot](snapshots/2026-11-12_1537/)**: Use **jev-1.14** (100% accurate, 132ms median, $0.0181 per 1k calls). Best decision model (jev-1.14, 100%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.5× faster and 3.2× cheaper.
 
 Full tables and per-use-case picks are in the snapshot; all runs are listed in [`snapshots/`](snapshots/).
 <!-- snapshot:end -->
@@ -134,4 +134,4 @@ Other uses that fit the same pattern:
 
 - Model IDs come from OpenRouter's Jev guide (Oct 2026). Not every model necessarily supports every question type; unsupported ones show up as per-example errors, not crashes.
 - `laya-local` is untested; check the self-hosted server's actual route before enabling it.
-- About 120 hand-labeled examples is enough to spot differences between models, not to rank close ones reliably. Treat a 1-2 point gap as noise and grow the datasets that matter to you.
+- The current dataset has 200 synthetic examples: 119 original hand-written examples plus 81 assistant-authored examples and labels that have not been independently human-reviewed. This is an exploratory comparison, not a powered study; small accuracy gaps do not establish a quality winner. The expansion was written after seeing earlier results and is not a blind held-out test.

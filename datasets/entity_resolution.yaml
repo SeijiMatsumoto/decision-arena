@@ -87,3 +87,77 @@ examples:
       record_b: Orion Health Partners - physician group - Denver, Colorado - orionhp.com - (303) 555-0142
     expected: true
     tags: [clear]
+
+# Expansion v2: assistant-authored before the comparison; not human-reviewed.
+  - id: er-v2-01
+    state:
+      record_a: Orchid Systems LLC, registry ID US-7781
+      record_b: Orchid Systems, formerly Orchid Labs; registry ID US-7781
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: er-v2-02
+    state:
+      record_a: Harbor Holdings, parent company of Harbor Payments
+      record_b: Harbor Payments, wholly owned subsidiary of Harbor Holdings
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: er-v2-03
+    state:
+      record_a: Alex Park, employee ID 412, Eastbank
+      record_b: Alex Park, employee ID 917, Eastbank; distinct staff member
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: er-v2-04
+    state:
+      record_a: Nia Gomez, profile /people/nia-42, analyst in 2022
+      record_b: Nia Gomez, profile /people/nia-42, promoted to director in 2025
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: er-v2-05
+    state:
+      record_a: North Finch Ltd, registry GB-100, London
+      record_b: North Finch Ltd, registry GB-200, London; unrelated business
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: er-v2-06
+    state:
+      record_a: Lumen Works, registration 8932, formerly based in Denver
+      record_b: Lumen Works, registration 8932, relocated to Seattle
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: er-v2-07
+    state:
+      record_a: Cedar Labs, cedarlabs.example
+      record_b: Cedar Lab Supplies, cedarsupply.example; unrelated laboratory retailer
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: er-v2-08
+    state:
+      record_a: Mina Shah, ORCID 0000-0001-1234-5678
+      record_b: M. Shah, researcher; ORCID 0000-0001-1234-5678
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: er-v2-09
+    state:
+      record_a: Riverbank Foundation, nonprofit registry N55
+      record_b: Riverbank Software Inc, corporation registry C88
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.

@@ -105,6 +105,17 @@ def render(report: dict[str, Any], project_readme: str = "../../README.md") -> s
     rows = pooled(report)
     datasets = list(report["datasets"])
     n_examples = sum(len(d["examples"]) for d in report["datasets"].values())
+    expanded = any(
+        "synthetic-v2" in e.get("tags", [])
+        for data in report["datasets"].values() for e in data["examples"]
+    )
+    provenance = (
+        "The original examples predate the first run; the expansion and its labels were "
+        "assistant-authored after earlier results, without independent human review. "
+        "Labels were fixed before the final comparison; this is not a blind held-out test. "
+        if expanded else
+        "They were written before the first run and not changed after seeing results. "
+    )
     lines = [
         f"# Results snapshot: {date}",
         "",
@@ -113,8 +124,9 @@ def render(report: dict[str, Any], project_readme: str = "../../README.md") -> s
             "through OpenRouter. Latency is the client-side round trip from one machine, so it includes "
             "network time; cost is what OpenRouter reported per call at the time. The datasets are small "
             f"and synthetic (see [Caveats]({project_readme}#caveats)), so treat accuracy gaps of a few "
-            "points as noise. They were written before the first run and not changed after seeing "
-            "results; the question format (noul / choice / score) originated with Jev, and LLMs get a "
+            "points as noise. "
+            + provenance +
+            "The question format (noul / choice / score) originated with Jev, and LLMs get a "
             "plain, untuned prompt. Raw data: [`report.json`](report.json)."
         ),
         "",

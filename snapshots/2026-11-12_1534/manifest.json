@@ -1,0 +1,26 @@
+{
+  "datasets": {
+    "datasets/agent_action_risk.yaml": "8d933e50bfd3364569d86c07ec8af34eb1e15e2293ccd04f2758eab3dcf8867b",
+    "datasets/company_match.yaml": "4de8c5bc9883b48d94a9f415161ec5f322c65ff83987ca03bde4375657635119",
+    "datasets/entity_resolution.yaml": "aef8c93181f0ca369f686903b47394c898a64c176de849ca4ce1e0560b47850d",
+    "datasets/lead_relevance.yaml": "7ab55beedd361522179ecf1034dcbb7161cd75e1a99c5527429f8a9c680be74f",
+    "datasets/page_type.yaml": "75dd1863d164770b70a8366d547be7fd863c9e03a2dec9eb2ced150db6666873",
+    "datasets/reply_intent.yaml": "8b14f92de3ade5f22ec3a025b0b1d580e5969d9b68f0bf47dadc932b5d6a7418",
+    "datasets/support_routing.yaml": "c0553fc23972081c1f705085022309a7105cb39320e9f82dcb85386f2b27dc2e",
+    "datasets/ticket_urgency.yaml": "5224ad79f1621dd602667553ac195abbaa0f948f41bde64d8ebea0fc458ad42c"
+  },
+  "examples": 200,
+  "new_examples": 81,
+  "models": [
+    "gemini-decision-1",
+    "jev-1.14",
+    "haiku-5.5",
+    "gpt-6-luna"
+  ],
+  "concurrency": 2,
+  "max_attempts": 1,
+  "model_config_sha256": "54b3ffc3e3d93e45530a3024a1ebfb0769d6edf4e59c6cff13d08d2d87766326",
+  "label_provenance": "119 original hand-written examples; 81 assistant-authored synthetic examples and labels, not independently human-reviewed",
+  "aborted_cache": ".cache/fresh-20261112T152246495893Z",
+  "final_cache": ".cache/fresh-20261112T152329699209Z"
+}

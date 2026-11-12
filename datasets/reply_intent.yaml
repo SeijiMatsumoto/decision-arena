@@ -81,3 +81,59 @@ examples:
     expected: interested
     tags: [distractor]
     note: Asks a question, but intent is clearly positive.
+
+# Expansion v2: assistant-authored before the comparison; not human-reviewed.
+  - id: ri-v2-01
+    state: Please delete my email from every campaign and do not contact me again.
+    expected: unsubscribe
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: ri-v2-02
+    state: Please check back after our budget review in February; we cannot discuss this before then.
+    expected: not_now
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: ri-v2-03
+    state: I changed employers last week. Our purchasing lead Priya is the contact you need.
+    expected: wrong_person
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: ri-v2-04
+    state: Do you host customer data in the EU? I need that information to evaluate relevance.
+    expected: question
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: ri-v2-05
+    state: Book me for a demo on Tuesday. Can you also share your security overview?
+    expected: interested
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: ri-v2-06
+    state: 'Automatic response: I am away until Monday and will respond when I return.'
+    expected: out_of_office
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: ri-v2-07
+    state: We evaluated the proposal and decided against it. Thanks for your time.
+    expected: not_interested
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: ri-v2-08
+    state: Me interesa, pero no podemos empezar hasta enero. Escríbeme entonces.
+    expected: not_now
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: ri-v2-09
+    state: Before I can decide whether this is useful, what is the minimum number of seats?
+    expected: question
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.

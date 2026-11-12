@@ -7,14 +7,14 @@
     "repo": "https://github.com/SeijiMatsumoto/decision-arena"
   },
   "snapshot": {
-    "id": "2026-11-12_1512",
-    "created_at": "2026-11-12T15:12:35+00:00",
-    "path": "snapshots/2026-11-12_1512"
+    "id": "2026-11-12_1537",
+    "created_at": "2026-11-12T15:37:11+00:00",
+    "path": "snapshots/2026-11-12_1537"
   },
-  "headline": "Use **jev-1.14** (99% accurate, 147ms median, $0.0183 per 1k calls). Best decision model (jev-1.14, 99%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.4\u00d7 faster and 3.3\u00d7 cheaper.",
+  "headline": "Use **jev-1.14** (100% accurate, 132ms median, $0.0181 per 1k calls). Best decision model (jev-1.14, 100%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.5\u00d7 faster and 3.2\u00d7 cheaper.",
   "pick": {
     "name": "jev-1.14",
-    "reason": "Best combined cost and speed among models within 2 points of the top and not significantly worse (99% accurate, 147ms median, $0.0183 per 1k calls)."
+    "reason": "Best combined cost and speed among models within 2 points of the top and not significantly worse (100% accurate, 132ms median, $0.0181 per 1k calls)."
   },
   "metric": {
     "name": "accuracy",
@@ -26,38 +26,56 @@
     {
       "name": "gemini-decision-1",
       "kind": "decision",
-      "quality": 0.9915966386554622,
-      "latency_ms": 321.50929188355803,
-      "cost_per_1k_usd": 0.022394957983193277,
+      "quality": 0.995,
+      "latency_ms": 290.91860400512815,
+      "cost_per_1k_usd": 0.0219255,
       "errors": 0,
       "verdict": "tied"
     },
     {
       "name": "jev-1.14",
       "kind": "decision",
-      "quality": 0.9915966386554622,
-      "latency_ms": 147.00045902282,
-      "cost_per_1k_usd": 0.01831411764705882,
+      "quality": 0.995,
+      "latency_ms": 131.58758310601115,
+      "cost_per_1k_usd": 0.0180726,
       "errors": 0,
       "verdict": "pick"
     },
     {
       "name": "haiku-5.5",
       "kind": "llm",
-      "quality": 0.9831932773109243,
-      "latency_ms": 942.7518751472235,
-      "cost_per_1k_usd": 0.059794117647058824,
+      "quality": 0.975,
+      "latency_ms": 856.2542914878577,
+      "cost_per_1k_usd": 0.058674,
       "errors": 0,
       "verdict": "tied"
+    },
+    {
+      "name": "luna-decisions",
+      "kind": "decision",
+      "quality": 0.965,
+      "latency_ms": 255.93172945082188,
+      "cost_per_1k_usd": 0.024654,
+      "errors": 0,
+      "verdict": "other"
+    },
+    {
+      "name": "gpt-6-luna",
+      "kind": "llm",
+      "quality": 0.96,
+      "latency_ms": 2386.0947084613144,
+      "cost_per_1k_usd": 0.043908,
+      "errors": 0,
+      "verdict": "worse"
     }
   ],
   "data": {
-    "items": 119,
+    "items": 200,
     "labels": {
-      "source": "hand-written",
-      "note": "About 120 hand-labeled examples; enough to spot differences between models, not to rank close ones."
+      "source": "mixed",
+      "note": "119 original hand-written examples plus 81 assistant-authored synthetic examples and labels, not independently human-reviewed. Exploratory; small accuracy differences remain inconclusive."
     },
-    "description": "119 examples across 8 bounded decision tasks (lead relevance, entity resolution, page type, ticket urgency, ...), tagged by scenario."
+    "description": "200 synthetic examples across 8 bounded decision tasks; 119 original plus 81 assistant-authored expansion examples."
   },
   "method": {
     "rules": "Tied = within 2% of the top accuracy and not significantly worse (exact McNemar, p < 0.05); pick = best combined cost and latency rank among tied. Pooled over every dataset; failed calls count as wrong.",

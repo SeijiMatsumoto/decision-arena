@@ -55,3 +55,49 @@ not evidence of production suitability or a guaranteed model-quality winner.
 
 Sources: [Google launch](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/),
 [OpenRouter model](https://openrouter.ai/google/gemini-decision-1).
+
+## OpenAI baseline and 200-example expansion (2026-11-12)
+
+User requested an OpenAI baseline and 200 total examples (initially phrased as 71 more).
+Use `openai/gpt-6-luna`, OpenAI's current efficient model for focused high-volume
+tasks ($0.10/M input, $0.50/M output on OpenRouter). User explicitly excluded
+GPT-5 nano because API access ends December 11, 2026. No Nano calls were made.
+Source: https://developers.openai.com/api/docs/models/gpt-6-luna and
+https://openrouter.ai/api/v1/models (verified before inference).
+
+The original 119 examples and all question criteria are unchanged. Add 81
+assistant-authored synthetic examples/labels across all eight tasks, tagged
+`synthetic-v2`; no independent human label review. The author saw prior aggregate
+results and existing examples, so this is an exploratory expansion, not a blind
+held-out benchmark. Freeze labels before calls and report expansion-only accuracy
+as well as pooled accuracy. No tuning based on outputs. 200 is a requested size,
+not a statistical power guarantee. Paired tests retain the earlier limitations.
+
+Use the existing scoring, failure policy, eligibility and recommendation rule.
+Run four models on the same 200 items with fresh local cache, concurrency 2,
+no retries: 800 comparison calls. Up to three preceding Luna type checks.
+Expected spend below $0.10, planning ceiling $0.20 (based on prior usage and
+current catalog prices). This is the bounded comparison extension requested by
+the user; no publication or deployment. Record actual costs and dataset hashes.
+
+```bash
+uv run arena run --models gemini-decision-1,jev-1.14,haiku-5.5,gpt-6-luna --fresh --attempts 1 --concurrency 2
+```
+
+Arithmetic correction before final pass: 119 + 71 = 190; added ten more to
+reach the requested total of 200 (81 new examples). An incomplete 190-item pass
+was stopped without inspecting predictions; its cache is preserved, excluded
+from comparison, and accounted for separately. Final pass uses a new fresh cache.
+
+## OpenAI Decisions correction
+
+The previous OpenAI baseline used chat completions. The user identified the
+dedicated Decisions API; run the already configured OpenRouter
+`openai/gpt-6-luna-decisions` entry on the exact same frozen 200 items, with
+concurrency 2, fresh local cache, and no retries. Official native API uses
+`gpt-6-luna` through `/v1/decisions`, input $0.10/M with no output charge.
+Source: https://developers.openai.com/api/docs/guides/decisions .
+Budget: 200 additional calls, estimated below $0.02, ceiling $0.05.
+Keep prior four-model snapshot and chat baseline. Combined snapshot must disclose
+that the Decisions contender was measured in a subsequent pass; never pretend
+old cached calls were fresh new latency measurements. No dataset or label edits.

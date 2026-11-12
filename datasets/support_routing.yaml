@@ -95,3 +95,59 @@ examples:
     expected: sales
     tags: [distractor]
     note: Mentions security, but it's a pre-signing contract request.
+
+# Expansion v2: assistant-authored before the comparison; not human-reviewed.
+  - id: sr-v2-01
+    state: Please send a copy of invoice INV-550; payment was completed yesterday.
+    expected: billing
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: sr-v2-02
+    state: The API returns invalid JSON when a customer name contains an emoji.
+    expected: technical
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: sr-v2-03
+    state: I replaced my phone and lost my authenticator; please help me regain access.
+    expected: account_access
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: sr-v2-04
+    state: We have not purchased yet. Can your enterprise contract include a data residency clause?
+    expected: sales
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: sr-v2-05
+    state: Please downgrade our Pro subscription to Free at renewal.
+    expected: cancellation
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: sr-v2-06
+    state: Our API key was posted publicly and is now being used by strangers.
+    expected: abuse_security
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: sr-v2-07
+    state: We are keeping the subscription. Please correct the VAT ID on our paid invoice.
+    expected: billing
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: sr-v2-08
+    state: I can sign in normally, but the report download always produces an empty file.
+    expected: technical
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: sr-v2-09
+    state: Our security review is complete and we want a quote for 200 seats before buying.
+    expected: sales
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.

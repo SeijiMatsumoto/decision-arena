@@ -108,3 +108,80 @@ examples:
     expected: true
     tags: [edge]
     note: Removal is implied, not named.
+
+# Expansion v2: assistant-authored before the comparison; not human-reviewed.
+  - id: cm-v2-01
+    state:
+      search: Independent US restaurant B2B SaaS companies with 50-500 employees
+      company: 'MesaCloud: restaurant scheduling subscriptions; HQ Boston; 50 employees; independently owned.'
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: cm-v2-02
+    state:
+      search: Independent US restaurant B2B SaaS companies with 50-500 employees
+      company: 'CounterLoop: restaurant SaaS, HQ Chicago, 501 employees, independent.'
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: cm-v2-03
+    state:
+      search: Independent US restaurant B2B SaaS companies with 50-500 employees
+      company: 'ServiceLeaf: restaurant SaaS, 120 employees, US sales office; headquarters Vancouver, Canada.'
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: cm-v2-04
+    state:
+      search: Independent US restaurant B2B SaaS companies with 50-500 employees
+      company: 'PrepGrid: independent inventory subscription software for restaurant kitchens, HQ Miami,
+        500 employees.'
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: cm-v2-05
+    state:
+      search: Carbon removal companies funded at Series A or later
+      company: 'CaptureStone: direct air capture pilot, $8M seed funding; plans Series A next year.'
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: cm-v2-06
+    state:
+      search: Carbon removal companies funded at Series A or later
+      company: 'DeepMineral: removes atmospheric CO2 via mineralization; completed Series A last month.'
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: cm-v2-07
+    state:
+      search: Carbon removal companies funded at Series A or later
+      company: 'LessFuel: Series B software optimizing fuel consumption to prevent emissions; no removal
+        operations.'
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: cm-v2-08
+    state:
+      search: Independent US restaurant B2B SaaS companies with 50-500 employees
+      company: 'KitchenSignal: US restaurant SaaS, 90 employees before acquisition; absorbed into its parent
+        and no longer independent.'
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: cm-v2-09
+    state:
+      search: Carbon removal companies funded at Series A or later
+      company: 'SoilVault: converts crop residues into durable biochar; Series C; currently independent.'
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.

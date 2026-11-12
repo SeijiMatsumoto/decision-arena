@@ -61,3 +61,118 @@ examples:
     state: Would love an API endpoint for bulk-deleting tags someday.
     expected: 0
     tags: [clear]
+
+# Expansion v2: assistant-authored before the comparison; not human-reviewed.
+  - id: tu-v2-01
+    state: Could you add a second color theme someday? Everything works fine.
+    expected: 0
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: tu-v2-02
+    state: The report preview is clipped in Firefox; opening it in Chrome works immediately.
+    expected: 1
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: tu-v2-03
+    state: My scheduled report cannot be generated at all; support confirmed no workaround. Other features
+      work.
+    expected: 2
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: tu-v2-04
+    state: All customer workspaces are inaccessible after the release. No users can work.
+    expected: 3
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: tu-v2-05
+    state: No rush, but production backups and the primary database both lost yesterday's records.
+    expected: 3
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: tu-v2-06
+    state: CRITICAL!!! The footer icon is one pixel off center. Functionality is unaffected.
+    expected: 0
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: tu-v2-07
+    state: The keyboard shortcut stopped working, but clicking the same action in the menu works.
+    expected: 1
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: tu-v2-08
+    state: One finance analyst cannot submit the required month-end report; the submission feature is broken
+      and there is no alternative.
+    expected: 2
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+
+# Ten further examples to correct 119 + 71 = 190 to the requested total of 200.
+  - id: tu-v2-09
+    state: Please add a custom illustration to the empty state. No work is affected.
+    expected: 0
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-10
+    state: The sort preference resets at sign-in; selecting the sort again restores it.
+    expected: 1
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-11
+    state: The only approval workflow for my department is broken with no workaround; the rest of the service
+      is normal.
+    expected: 2
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-12
+    state: An attacker is actively downloading customer records through a compromised admin session.
+    expected: 3
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-13
+    state: The download filename is wrong, but renaming it locally fixes the problem.
+    expected: 1
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-14
+    state: The button corners should be rounder. This is purely visual.
+    expected: 0
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-15
+    state: A single designer cannot open any project in the editor; no workaround exists.
+    expected: 2
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-16
+    state: Every customer checkout fails, blocking all purchases across the service.
+    expected: 3
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-17
+    state: The sidebar overlaps the form on my narrow screen; widening the window fixes it.
+    expected: 1
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.
+  - id: tu-v2-18
+    state: 'Suggestion for next year: let us choose an avatar background color.'
+    expected: 0
+    tags:
+    - synthetic-v2
+    note: Assistant-authored before final inference; not independently human-reviewed.

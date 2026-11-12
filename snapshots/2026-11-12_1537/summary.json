@@ -1,0 +1,95 @@
+{
+  "schema": "arena-summary/1",
+  "arena": {
+    "name": "decision-arena",
+    "title": "Decision Arena",
+    "question": "For bounded classification (pick a label, yes/no, a score), should a decision model like Jev make the call, or a cheap LLM?",
+    "repo": "https://github.com/SeijiMatsumoto/decision-arena"
+  },
+  "snapshot": {
+    "id": "2026-11-12_1537",
+    "created_at": "2026-11-12T15:37:11+00:00",
+    "path": "snapshots/2026-11-12_1537"
+  },
+  "headline": "Use **jev-1.14** (100% accurate, 132ms median, $0.0181 per 1k calls). Best decision model (jev-1.14, 100%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.5\u00d7 faster and 3.2\u00d7 cheaper.",
+  "pick": {
+    "name": "jev-1.14",
+    "reason": "Best combined cost and speed among models within 2 points of the top and not significantly worse (100% accurate, 132ms median, $0.0181 per 1k calls)."
+  },
+  "metric": {
+    "name": "accuracy",
+    "label": "Accuracy",
+    "higher_is_better": true,
+    "format": "percent"
+  },
+  "contenders": [
+    {
+      "name": "gemini-decision-1",
+      "kind": "decision",
+      "quality": 0.995,
+      "latency_ms": 290.91860400512815,
+      "cost_per_1k_usd": 0.0219255,
+      "errors": 0,
+      "verdict": "tied"
+    },
+    {
+      "name": "jev-1.14",
+      "kind": "decision",
+      "quality": 0.995,
+      "latency_ms": 131.58758310601115,
+      "cost_per_1k_usd": 0.0180726,
+      "errors": 0,
+      "verdict": "pick"
+    },
+    {
+      "name": "haiku-5.5",
+      "kind": "llm",
+      "quality": 0.975,
+      "latency_ms": 856.2542914878577,
+      "cost_per_1k_usd": 0.058674,
+      "errors": 0,
+      "verdict": "tied"
+    },
+    {
+      "name": "luna-decisions",
+      "kind": "decision",
+      "quality": 0.965,
+      "latency_ms": 255.93172945082188,
+      "cost_per_1k_usd": 0.024654,
+      "errors": 0,
+      "verdict": "other"
+    },
+    {
+      "name": "gpt-6-luna",
+      "kind": "llm",
+      "quality": 0.96,
+      "latency_ms": 2386.0947084613144,
+      "cost_per_1k_usd": 0.043908,
+      "errors": 0,
+      "verdict": "worse"
+    }
+  ],
+  "data": {
+    "items": 200,
+    "labels": {
+      "source": "mixed",
+      "note": "119 original hand-written examples plus 81 assistant-authored synthetic examples and labels, not independently human-reviewed. Exploratory; small accuracy differences remain inconclusive."
+    },
+    "description": "200 synthetic examples across 8 bounded decision tasks; 119 original plus 81 assistant-authored expansion examples."
+  },
+  "method": {
+    "rules": "Tied = within 2% of the top accuracy and not significantly worse (exact McNemar, p < 0.05); pick = best combined cost and latency rank among tied. Pooled over every dataset; failed calls count as wrong.",
+    "test": "exact McNemar, paired",
+    "alpha": 0.05
+  },
+  "outcome": {
+    "status": "pending",
+    "note": "Not yet recorded which enable-ai decisions moved because of this result."
+  },
+  "caveats": [
+    "Most models score 95%+ on these datasets, so the pick is driven by cost and speed; harder or real examples are needed to separate them on quality.",
+    "Treat a 1-2 point accuracy gap as noise at this sample size.",
+    "LLM reasoning is turned off where possible so latency comparisons are fair."
+  ],
+  "mock": false
+}

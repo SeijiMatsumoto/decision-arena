@@ -28,6 +28,8 @@ models:
   - name: luna-decisions
     provider: decisions
     model: openai/gpt-6-luna-decisions
+    price_in: 0.10
+    price_out: 0.0
 
   - name: ms-decision-1
     provider: decisions

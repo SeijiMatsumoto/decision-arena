@@ -174,3 +174,80 @@ examples:
     expected: false
     tags: [adversarial]
     note: Prompt injection inside scraped profile text.
+
+# Expansion v2: assistant-authored before the comparison; not human-reviewed.
+  - id: lr-v2-01
+    state:
+      search: Director or above in procurement at US hospitals
+      candidate: Amira Cole, Chief Purchasing Officer at Pine Regional Hospital, Maine.
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: lr-v2-02
+    state:
+      search: Director or above in procurement at US hospitals
+      candidate: Evan Lane, procurement manager at Pine Regional Hospital, reporting to the procurement
+        director.
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: lr-v2-03
+    state:
+      search: VP or Head of Engineering at Series B+ fintech startups in Berlin
+      candidate: Lena Vogt, VP Engineering at a Series A payments startup in Berlin; Series B not yet closed.
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: lr-v2-04
+    state:
+      search: VP or Head of Engineering at Series B+ fintech startups in Berlin
+      candidate: Omar Weiss, Head of Engineering, Berlin-based Series D lending startup; currently lives
+        and works in Berlin.
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: lr-v2-05
+    state:
+      search: Senior or staff ML engineers who shipped LLM products to production
+      candidate: Iris Lin, Staff ML Engineer; LLM demo runs only on her laptop, never deployed.
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: lr-v2-06
+    state:
+      search: Senior or staff ML engineers who shipped LLM products to production
+      candidate: Ravi Sen, Senior Machine Learning Engineer; deployed the customer-facing LLM summarizer
+        used daily by paying customers.
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: lr-v2-07
+    state:
+      search: Director or above in procurement at US hospitals
+      candidate: Director of Procurement vacancy, Ohio hospital. Apply by December 1.
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: lr-v2-08
+    state:
+      search: Director or above in procurement at US hospitals
+      candidate: Noah Hall, former hospital procurement VP; now director of sales at a medical device manufacturer.
+    expected: false
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
+  - id: lr-v2-09
+    state:
+      search: Director or above in procurement at US hospitals
+      candidate: Lucia Mora, directora de compras del Hospital Valley, Arizona, Estados Unidos; cargo actual.
+    expected: true
+    tags:
+    - synthetic-v2
+    note: Assistant-authored synthetic example and label; not independently human-reviewed.
