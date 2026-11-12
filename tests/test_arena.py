@@ -1,16 +1,70 @@
 import asyncio
 from pathlib import Path
 
+import httpx
 import pytest
 
 from decision_arena.datasets import Example, Question, load_datasets
 from decision_arena.metrics import auc, best_threshold, macro_f1, ndcg
-from decision_arena.providers import ModelSpec, normalize_decision
+from decision_arena.providers import DecisionsProvider, ModelSpec, load_models, normalize_decision
 from decision_arena.recommend import mcnemar_p, recommend
 from decision_arena.runner import run_eval
 from decision_arena.snapshot import END, START, save_snapshot, write_index, write_readme_pointer
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.mark.parametrize("dataset_name,answer", [
+    ("lead_relevance", {"noul": 0.9}),
+    ("page_type", {"choice": "team_page", "confidence": 0.9}),
+    ("ticket_urgency", {"score": 1.1, "probabilities": {"0": 0.1, "1": 0.7, "2": 0.2}}),
+])
+def test_gemini_decisions_transport_and_cache(tmp_path, monkeypatch, dataset_name, answer):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "test-only")
+    spec = load_models(ROOT / "models.yaml", ["gemini-decision-1"])[0]
+    dataset = next(d for d in load_datasets(ROOT / "datasets") if d.name == dataset_name)
+    calls = []
+
+    def handle(request):
+        import json
+        body = json.loads(request.content)
+        assert body == {"model": "google/gemini-decision-1", "state": dataset.examples[0].state,
+                        "questions": {"q": dataset.question.to_api()}}
+        calls.append(request)
+        return httpx.Response(200, json={"answers": {"q": answer},
+                                        "usage": {"input_tokens": 200, "output_tokens": 0}})
+
+    async def check():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handle)) as client:
+            provider = DecisionsProvider(spec, tmp_path, client)
+            live = await provider.decide(dataset.question, dataset.examples[0])
+            replay = await provider.decide(dataset.question, dataset.examples[0])
+            assert live.label == normalize_decision(dataset.question, answer).label
+            assert live.cost == pytest.approx(0.00002)
+            assert not live.cached and replay.cached
+            assert len(calls) == 1
+
+    asyncio.run(check())
+
+
+def test_single_attempt_never_retries_server_error(tmp_path, monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "test-only")
+    spec = ModelSpec(name="single", model="test", provider="decisions", max_attempts=1)
+    calls = []
+
+    def handle(request):
+        calls.append(request)
+        return httpx.Response(503, text="unavailable")
+
+    async def check():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handle)) as client:
+            provider = DecisionsProvider(spec, tmp_path, client)
+            with pytest.raises(RuntimeError, match="HTTP 503"):
+                await provider._post_cached("https://example.test/decisions", {"model": "test"})
+        assert len(calls) == 1
+        assert not list(tmp_path.glob("*.json"))
+
+    asyncio.run(check())
 
 
 def test_all_datasets_load_and_labels_are_valid():

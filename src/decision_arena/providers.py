@@ -11,7 +11,7 @@ from typing import Any, Literal
 
 import httpx
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .datasets import Example, Question
 
@@ -65,6 +65,7 @@ class ModelSpec(BaseModel):
     price_out: float | None = None
     extra: dict[str, Any] = {}  # merged into the request body
     rpm: float | None = None  # client-side cap on requests per minute
+    max_attempts: int = Field(default=MAX_ATTEMPTS, ge=1)
 
     def model_post_init(self, _context: Any) -> None:
         if self.kind is None:
@@ -170,13 +171,13 @@ class Provider:
         if self.spec.rpm:
             limiter = _limiters.setdefault(self.spec.name, RateLimiter(self.spec.rpm))
 
-        for attempt in range(MAX_ATTEMPTS):
+        for attempt in range(self.spec.max_attempts):
             if limiter:
                 await limiter.wait()
             started = perf_counter()
             response = await self.client.post(url, json=body, headers=headers)
             latency_ms = (perf_counter() - started) * 1000
-            if response.status_code in RETRY_STATUS and attempt < MAX_ATTEMPTS - 1:
+            if response.status_code in RETRY_STATUS and attempt < self.spec.max_attempts - 1:
                 await asyncio.sleep(retry_delay(response, attempt))
                 continue
             if response.status_code >= 400:

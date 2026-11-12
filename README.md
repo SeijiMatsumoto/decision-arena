@@ -11,7 +11,7 @@ one line with its model ID.
 <!-- snapshot:start -->
 ## Latest results
 
-**[2026-10-27 snapshot](snapshots/2026-10-27_1839/)**: Use **jev-1.14** (99% accurate, 185ms median, $0.0183 per 1k calls). Best decision model (jev-1.14, 99%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 7.7× faster and 3.3× cheaper.
+**[2026-11-12 snapshot](snapshots/2026-11-12_1512/)**: Use **jev-1.14** (99% accurate, 147ms median, $0.0183 per 1k calls). Best decision model (jev-1.14, 99%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.4× faster and 3.3× cheaper.
 
 Full tables and per-use-case picks are in the snapshot; all runs are listed in [`snapshots/`](snapshots/).
 <!-- snapshot:end -->
@@ -45,6 +45,7 @@ uv run arena list                                      # datasets + models
 uv run arena run                                       # all enabled models x all datasets
 uv run arena run --models jev-1.14,luna-decisions --datasets lead_relevance,company_match
 uv run arena run --limit 3                             # smoke test: 3 examples per dataset
+uv run arena run --models gemini-decision-1,jev-1.14,haiku-5.5 --fresh --attempts 1 --concurrency 2
 uv run arena run --misses                              # also list examples models got wrong
 uv run arena show --misses                             # re-print the latest report
 uv run arena snapshot                                  # save the latest run under snapshots/ and update the link below
@@ -55,6 +56,11 @@ Each run writes `reports/run-<timestamp>.json` and a matching `.html`. The HTML 
 one row per example and one column per model, so you can compare outputs side by side. Responses
 are cached in `.cache/`, keyed on the exact request. Rerunning or adding one new model only pays for
 what's new.
+
+Gemini Decision 1 is enabled through the existing OpenRouter Decisions adapter and
+appears in Run evals and Playground. The [comparison protocol](EXPERIMENT.md) uses
+`--fresh` to create an isolated cache without deleting historical responses, and
+`--attempts 1` to disable retries for measured paid runs.
 
 ## Models (`models.yaml`)
 

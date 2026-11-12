@@ -1,0 +1,21 @@
+{
+  "command": "uv run arena run --models gemini-decision-1,jev-1.14,haiku-5.5 --fresh --attempts 1 --concurrency 2",
+  "git_base": "22ce19598b310e11db184b68ce15d17742ff0567",
+  "working_tree_changes": true,
+  "datasets_sha256": {
+    "datasets/agent_action_risk.yaml": "71114a460d7e30981019dfa0fd419409b5951b199abfacb870018d964352e402",
+    "datasets/company_match.yaml": "9537a52c548ca37823a58ad9975dbc8852b5c3ccaedace563fcac00de9b5963b",
+    "datasets/entity_resolution.yaml": "645a134fa5d66205338a6a36d6a9730d1a93abdd8ff7fb2ceb392a7a4fd27d13",
+    "datasets/lead_relevance.yaml": "27bb422e677ebefc8f58eedc950bbf5cfad1cf2b0e819763a7ec0f430cee704b",
+    "datasets/page_type.yaml": "f2f4a52a36535c8aa61e2090a1c4ff7eaac3077a648982c9bd9bbf90be280a69",
+    "datasets/reply_intent.yaml": "11bb8e4a9d3e24acb01462b7068f1bc394372fbf0785c226058ed3b51cbc3e77",
+    "datasets/support_routing.yaml": "55617b935e7a9028e1b6fe220b8b58b2527d64ab62dbe221a63f5c0762764bef",
+    "datasets/ticket_urgency.yaml": "27ee86551ef1dd9fc744180f21c8310d4dd3530f0d5e1d2cd0073d06acc6e97b"
+  },
+  "concurrency_per_model": 2,
+  "max_attempts": 1,
+  "cache_directory": ".cache/fresh-20261112T151132889775Z",
+  "fresh_calls": 357,
+  "errors": 0,
+  "run_cost_usd": 0.011959879999999999
+}

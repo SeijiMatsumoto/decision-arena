@@ -5,4 +5,5 @@ Create one from your latest run with `uv run arena snapshot`.
 
 | Date | Models | Examples | Headline |
 |---|---:|---:|---|
+| [2026-11-12_1512](2026-11-12_1512/) | 3 | 119 | Use **jev-1.14** (99% accurate, 147ms median, $0.0183 per 1k calls). Best decision model (jev-1.14, 99%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.4× faster and 3.3× cheaper. |
 | [2026-10-27_1839](2026-10-27_1839/) | 11 | 119 | Use **jev-1.14** (99% accurate, 185ms median, $0.0183 per 1k calls). Best decision model (jev-1.14, 99%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 7.7× faster and 3.3× cheaper. |

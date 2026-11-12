@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import json
 from collections import defaultdict
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -180,6 +181,13 @@ def cmd_list(args: argparse.Namespace) -> None:
 def cmd_run(args: argparse.Namespace) -> None:
     datasets = load_datasets(args.datasets_dir, args.datasets)
     models = load_models(args.models_file, args.models)
+    if args.attempts is not None:
+        if args.attempts < 1:
+            raise SystemExit("--attempts must be at least 1")
+        models = [m.model_copy(update={"max_attempts": args.attempts}) for m in models]
+    cache_dir = PROJECT_ROOT / ".cache"
+    if args.fresh:
+        cache_dir /= "fresh-" + datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
     if args.limit:
         for d in datasets:
             d.examples = d.examples[: args.limit]
@@ -194,7 +202,7 @@ def cmd_run(args: argparse.Namespace) -> None:
             progress.update(bar, completed=done, total=total)
 
         report = asyncio.run(
-            run_eval(datasets, models, PROJECT_ROOT / ".cache", args.concurrency, on_progress)
+            run_eval(datasets, models, cache_dir, args.concurrency, on_progress)
         )
     if args.out:
         out = args.out
@@ -253,6 +261,8 @@ def main() -> None:
     )
     run.add_argument("--limit", type=int, help="Only the first N examples per dataset")
     run.add_argument("--concurrency", type=int, default=8, help="In-flight requests per model")
+    run.add_argument("--fresh", action="store_true", help="Use a new cache; preserve old responses")
+    run.add_argument("--attempts", type=int, help="Maximum HTTP attempts per call (1 disables retries)")
     run.add_argument("--misses", action="store_true", help="List examples models got wrong")
     run.add_argument("--out", type=Path)
     run.set_defaults(func=cmd_run)

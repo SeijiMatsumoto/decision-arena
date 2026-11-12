@@ -9,6 +9,13 @@
 # Decision model IDs come from https://openrouter.ai/docs/guides/community/jev (Oct 2026).
 
 models:
+  # Gemini Decision 1 (Nov 11, 2026): same OpenRouter Decisions API, input-only billing.
+  - name: gemini-decision-1
+    provider: decisions
+    model: google/gemini-decision-1
+    price_in: 0.10
+    price_out: 0.0
+
   - name: jev-1.14
     provider: decisions
     model: typesafe/jev-1.14

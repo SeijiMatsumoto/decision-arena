@@ -7,14 +7,14 @@
     "repo": "https://github.com/SeijiMatsumoto/decision-arena"
   },
   "snapshot": {
-    "id": "2026-10-27_1839",
-    "created_at": "2026-10-27T18:39:23+00:00",
-    "path": "snapshots/2026-10-27_1839"
+    "id": "2026-11-12_1512",
+    "created_at": "2026-11-12T15:12:35+00:00",
+    "path": "snapshots/2026-11-12_1512"
   },
-  "headline": "Use **jev-1.14** (99% accurate, 185ms median, $0.0183 per 1k calls). Best decision model (jev-1.14, 99%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 7.7\u00d7 faster and 3.3\u00d7 cheaper.",
+  "headline": "Use **jev-1.14** (99% accurate, 147ms median, $0.0183 per 1k calls). Best decision model (jev-1.14, 99%) vs best LLM (haiku-5.5, 98%): no significant accuracy difference; the decision model is 6.4\u00d7 faster and 3.3\u00d7 cheaper.",
   "pick": {
     "name": "jev-1.14",
-    "reason": "Best combined cost and speed among models within 2 points of the top and not significantly worse (99% accurate, 185ms median, $0.0183 per 1k calls)."
+    "reason": "Best combined cost and speed among models within 2 points of the top and not significantly worse (99% accurate, 147ms median, $0.0183 per 1k calls)."
   },
   "metric": {
     "name": "accuracy",
@@ -24,103 +24,31 @@
   },
   "contenders": [
     {
+      "name": "gemini-decision-1",
+      "kind": "decision",
+      "quality": 0.9915966386554622,
+      "latency_ms": 321.50929188355803,
+      "cost_per_1k_usd": 0.022394957983193277,
+      "errors": 0,
+      "verdict": "tied"
+    },
+    {
       "name": "jev-1.14",
       "kind": "decision",
       "quality": 0.9915966386554622,
-      "latency_ms": 185.4192498140037,
+      "latency_ms": 147.00045902282,
       "cost_per_1k_usd": 0.01831411764705882,
       "errors": 0,
       "verdict": "pick"
     },
     {
-      "name": "clef-flash",
-      "kind": "decision",
-      "quality": 0.9831932773109243,
-      "latency_ms": 369.7672919370234,
-      "cost_per_1k_usd": 0.005590991596638655,
-      "errors": 0,
-      "verdict": "tied"
-    },
-    {
       "name": "haiku-5.5",
       "kind": "llm",
       "quality": 0.9831932773109243,
-      "latency_ms": 1419.3993341177702,
-      "cost_per_1k_usd": 0.06078571428571429,
+      "latency_ms": 942.7518751472235,
+      "cost_per_1k_usd": 0.059794117647058824,
       "errors": 0,
       "verdict": "tied"
-    },
-    {
-      "name": "gpt-5.4-nano",
-      "kind": "llm",
-      "quality": 0.9747899159663865,
-      "latency_ms": 1066.0264580510557,
-      "cost_per_1k_usd": 0.08564033613445377,
-      "errors": 0,
-      "verdict": "tied"
-    },
-    {
-      "name": "liquid-d1",
-      "kind": "decision",
-      "quality": 0.9663865546218487,
-      "latency_ms": 229.0562498383224,
-      "cost_per_1k_usd": 0.003097478991596639,
-      "errors": 0,
-      "verdict": "other"
-    },
-    {
-      "name": "ms-decision-1",
-      "kind": "decision",
-      "quality": 0.9663865546218487,
-      "latency_ms": 261.6858328692615,
-      "cost_per_1k_usd": 0.006166588235294118,
-      "errors": 0,
-      "verdict": "other"
-    },
-    {
-      "name": "gemini-3.5-flash-lite",
-      "kind": "llm",
-      "quality": 0.957983193277311,
-      "latency_ms": 814.801124855876,
-      "cost_per_1k_usd": 0.1145579831932773,
-      "errors": 0,
-      "verdict": "other"
-    },
-    {
-      "name": "luna-decisions",
-      "kind": "decision",
-      "quality": 0.957983193277311,
-      "latency_ms": 296.6580409556627,
-      "cost_per_1k_usd": 0.02521512605042017,
-      "errors": 0,
-      "verdict": "other"
-    },
-    {
-      "name": "deepseek-v4-flash",
-      "kind": "llm",
-      "quality": 0.9495798319327731,
-      "latency_ms": 1100.4879591055214,
-      "cost_per_1k_usd": 0.016767184571428572,
-      "errors": 0,
-      "verdict": "other"
-    },
-    {
-      "name": "gpt-6-luna",
-      "kind": "llm",
-      "quality": 0.9495798319327731,
-      "latency_ms": 2043.9928746782243,
-      "cost_per_1k_usd": 0.047752941176470595,
-      "errors": 0,
-      "verdict": "other"
-    },
-    {
-      "name": "mistral-small-3.2",
-      "kind": "llm",
-      "quality": 0.8991596638655462,
-      "latency_ms": 714.299791958183,
-      "cost_per_1k_usd": 0.017368550420168067,
-      "errors": 0,
-      "verdict": "worse"
     }
   ],
   "data": {
